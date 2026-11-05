@@ -190,30 +190,9 @@ A GitHub ruleset on `main` requires a pull request for every change (0 required 
 
 Cloudflare builds and deploys the site, so Actions only run quality checks on every pull request and every push to `main`. A failed check shows as a red mark before anything is merged. There are no scheduled jobs, because the ratings come from the edge function.
 
-```yaml
-# .github/workflows/ci.yml
-name: CI
-on:
-  pull_request:
-  push:
-    branches: [main]
-jobs:
-  check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run check
-      - run: npm test
-      - run: npm run build
-```
+The workflow is `.github/workflows/ci.yml`. It uses `actions/checkout@v6` and `actions/setup-node@v6`, reads the Node version from `.nvmrc`, caches npm, and runs one job, `checks`. That job name is the required status check in the ruleset.
 
-The steps are: install dependencies, lint, type check, run the unit tests (for example the parsing of the Chess.com and FIDE responses in `chess.ts`), and test the production build. Action versions are a draft and should be checked when the file is written.
+The steps are: install dependencies (`npm ci`), lint, type check, run the unit tests (for example the parsing of the Chess.com and FIDE responses in `chess.ts`), and test the production build. Action versions were checked on 5 November 2026.
 
 **Optional later:** a Lighthouse CI step to enforce the score target from section 8.
 
