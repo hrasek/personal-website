@@ -89,6 +89,23 @@ Entries D1 to D5 were made before this log existed and are recorded here on
   update both the repository and the claude.ai project.
 - **Why:** Claude Code works locally and can only see the repository.
 
+## D10: SvelteKit 3, configured in `vite.config.ts` (5 November 2026)
+
+- **Decision:** the project was created with `sv create` (sv 1.3.0) and uses
+  SvelteKit 3. The adapter (`adapter-static`) and the Vitest setup live in
+  `vite.config.ts`. All pages are prerendered via `src/routes/+layout.ts`.
+- **Why:** SvelteKit 3 no longer supports `svelte.config.js`, so the spec's
+  repository structure was updated.
+
+## D11: Unit tests in Node only (5 November 2026)
+
+- **Decision:** Vitest runs in the Node environment. The browser mode the
+  scaffold added (Playwright with Chromium) was removed. `npm test` runs
+  `vitest run --passWithNoTests`, so CI passes before the first test exists.
+- **Why:** the planned tests (parsing the chess API responses) don't need a
+  browser, and CI stays fast without downloading Chromium.
+- **Later:** component tests in a browser can be added in their own PR.
+
 ## Open
 
 See [SPEC.md](SPEC.md), section 12: domain, licence, photo, blog, which

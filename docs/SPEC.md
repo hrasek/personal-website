@@ -34,7 +34,7 @@ The website is the extended version of my one-page CV. The CV stays short; the w
 The site is a single scrolling page with anchor navigation. Sections in order:
 
 1. **Hero**: name, one-line identity, buttons (GitHub, LinkedIn, Email, Download CV).
-   - Draft line: *Software engineer with a PhD in physics. I build scrapers, RAG chatbots and backend systems in Python.*
+   - Draft line: _Software engineer with a PhD in physics. I build scrapers, RAG chatbots and backend systems in Python._
 2. **About**: 2 to 3 short paragraphs on the path from spectroscopy to software and what I am looking for.
 3. **Projects**: 3 to 5 cards. Each card has a title, 2-sentence description, tech tags, and a GitHub or demo link.
    - Client work can only be shown if permitted. Otherwise build small public versions (for example a RAG chatbot over public documents, a scraper with a clean data output).
@@ -57,14 +57,14 @@ The site is a single scrolling page with anchor navigation. Sections in order:
 
 **Colour palette**
 
-| Role | Light mode | Dark mode |
-| --- | --- | --- |
-| Background | #FAFAF7 | #101214 |
-| Surface (cards) | #FFFFFF | #181B1F |
-| Text | #14161A | #ECEDEE |
-| Muted text | #5B616B | #9AA1AB |
-| Accent (chess green) | #2F6F55 | #5FB894 |
-| Border | #E4E4DE | #2A2E34 |
+| Role                 | Light mode | Dark mode |
+| -------------------- | ---------- | --------- |
+| Background           | #FAFAF7    | #101214   |
+| Surface (cards)      | #FFFFFF    | #181B1F   |
+| Text                 | #14161A    | #ECEDEE   |
+| Muted text           | #5B616B    | #9AA1AB   |
+| Accent (chess green) | #2F6F55    | #5FB894   |
+| Border               | #E4E4DE    | #2A2E34   |
 
 **Typography**
 
@@ -87,15 +87,15 @@ The site is a single scrolling page with anchor navigation. Sections in order:
 
 ## 5. Technology
 
-| Area | Choice | Reason |
-| --- | --- | --- |
-| Framework | SvelteKit with the static adapter | I already know Svelte; produces a fast static site |
-| Language | TypeScript (JavaScript acceptable) | Safer, shows modern practice |
-| Styling | Plain CSS with CSS variables (theme tokens) | Simple, no dependencies, easy dark mode |
-| Content | Project data in a local JSON or Markdown file | Easy to edit without touching components |
-| Fonts | Self-hosted Inter and JetBrains Mono | Faster, no third-party requests |
-| Icons | Inline SVG (Lucide or Simple Icons) | No icon font needed |
-| Analytics | Plausible or Cloudflare Web Analytics (optional) | Privacy-friendly, no cookie banner |
+| Area      | Choice                                           | Reason                                             |
+| --------- | ------------------------------------------------ | -------------------------------------------------- |
+| Framework | SvelteKit 3 with the static adapter              | I already know Svelte; produces a fast static site |
+| Language  | TypeScript (JavaScript acceptable)               | Safer, shows modern practice                       |
+| Styling   | Plain CSS with CSS variables (theme tokens)      | Simple, no dependencies, easy dark mode            |
+| Content   | Project data in a local JSON or Markdown file    | Easy to edit without touching components           |
+| Fonts     | Self-hosted Inter and JetBrains Mono             | Faster, no third-party requests                    |
+| Icons     | Inline SVG (Lucide or Simple Icons)              | No icon font needed                                |
+| Analytics | Plausible or Cloudflare Web Analytics (optional) | Privacy-friendly, no cookie banner                 |
 
 **Alternative considered:** Astro, if a Markdown blog becomes important. Python backends (Flask, Django) and Laravel were rejected because a portfolio does not need a server.
 
@@ -111,14 +111,14 @@ The site is a single scrolling page with anchor navigation. Sections in order:
 
 ```json
 {
-  "chesscom": {
-    "blitz":  { "rating": 2254, "lastGame": "2026-07-31" },
-    "bullet": { "rating": 2089, "lastGame": "2026-11-04" },
-    "rapid":  { "rating": 2206, "lastGame": "2023-03-01" },
-    "daily":  { "rating": 2077, "lastGame": "2026-03-29" }
-  },
-  "fide": { "classical": 2131 },
-  "fetchedAt": "2026-11-04T14:32:31Z"
+	"chesscom": {
+		"blitz": { "rating": 2254, "lastGame": "2026-07-31" },
+		"bullet": { "rating": 2089, "lastGame": "2026-11-04" },
+		"rapid": { "rating": 2206, "lastGame": "2023-03-01" },
+		"daily": { "rating": 2077, "lastGame": "2026-03-29" }
+	},
+	"fide": { "classical": 2131 },
+	"fetchedAt": "2026-11-04T14:32:31Z"
 }
 ```
 
@@ -147,7 +147,7 @@ personal-website/
 │  ├─ SPEC.md                    # this specification
 │  └─ DECISIONS.md               # decision log
 ├─ .github/workflows/ci.yml      # CI checks on pull requests
-├─ svelte.config.js              # static adapter
+├─ vite.config.ts                # SvelteKit 3 config, static adapter, Vitest
 ├─ CLAUDE.md                     # instructions for Claude Code
 └─ README.md
 ```
@@ -163,12 +163,12 @@ personal-website/
 
 The site is published by connecting the GitHub repository to Cloudflare Pages: every push to `main` builds and deploys it automatically. The only running cost is the domain name.
 
-| Part | Cost | Note |
-| --- | --- | --- |
-| Hosting (Cloudflare Pages) | Free | Static assets are free and unlimited; the free plan allows 500 builds per month, one at a time |
-| Edge function `/api/chess` | Free | 100,000 requests per day shared with Workers; the site needs far fewer, and at the limit the page shows the stored fallback ratings |
-| GitHub Actions | Free | Free for standard runners in public repositories, so the repository stays public |
-| Domain | about 10 to 25 EUR per year | My estimate; check the price at the registrar before buying |
+| Part                       | Cost                        | Note                                                                                                                                |
+| -------------------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Hosting (Cloudflare Pages) | Free                        | Static assets are free and unlimited; the free plan allows 500 builds per month, one at a time                                      |
+| Edge function `/api/chess` | Free                        | 100,000 requests per day shared with Workers; the site needs far fewer, and at the limit the page shows the stored fallback ratings |
+| GitHub Actions             | Free                        | Free for standard runners in public repositories, so the repository stays public                                                    |
+| Domain                     | about 10 to 25 EUR per year | My estimate; check the price at the registrar before buying                                                                         |
 
 Cost figures come from the official [Cloudflare Pages limits](https://developers.cloudflare.com/pages/platform/limits), [Pages Functions pricing](https://developers.cloudflare.com/pages/functions/pricing/index.md) and [GitHub Actions billing](https://docs.github.com/en/actions/reference/usage-limits-billing-and-administration) pages, read on 4 November 2026. Check them again before launch.
 

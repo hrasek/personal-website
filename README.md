@@ -16,13 +16,17 @@ for a software engineer with a PhD in physics.
 
 ## Getting started
 
-<!-- TODO: fill in after the SvelteKit scaffold exists. -->
-
-Requirements: Node.js _(version to be set with the scaffold)_.
+<!-- TODO: state the required Node.js version once it is pinned. -->
 
 ```bash
-npm install
-npm run dev      # placeholder until the scaffold exists
+npm install          # install dependencies
+npm run dev          # start the dev server
+npm run check        # type check (svelte-check)
+npm run lint         # Prettier check + ESLint
+npm run format       # format all files with Prettier
+npm test             # unit tests (Vitest, single run)
+npm run build        # production build into build/
+npm run preview      # serve the production build locally
 ```
 
 ## Project structure
