@@ -106,6 +106,18 @@ Entries D1 to D5 were made before this log existed and are recorded here on
   browser, and CI stays fast without downloading Chromium.
 - **Later:** component tests in a browser can be added in their own PR.
 
+## D12: Node.js 24 (5 November 2026)
+
+- **Decision:** `.nvmrc` pins Node.js 24, which Cloudflare Pages and
+  `actions/setup-node` both read. `package.json` has
+  `"engines": { "node": ">=24" }`, and `.npmrc` has `engine-strict=true`,
+  so `npm install` refuses an older Node locally.
+- **Why:** 24 is an LTS line and is what I have installed (24.14.1).
+  Without a pin, Cloudflare would build with its default (22.16.0, per its
+  build image docs on 5 November 2026). The Cloudflare v3 build image does
+  not read `engines`, so the `.nvmrc` file is what counts there.
+- **Later:** move to Node 26 (Active LTS) in its own PR.
+
 ## Open
 
 See [SPEC.md](SPEC.md), section 12: domain, licence, photo, blog, which

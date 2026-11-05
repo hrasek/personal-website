@@ -16,7 +16,7 @@ for a software engineer with a PhD in physics.
 
 ## Getting started
 
-<!-- TODO: state the required Node.js version once it is pinned. -->
+Requirements: Node.js 24 or newer (pinned in `.nvmrc`).
 
 ```bash
 npm install          # install dependencies
