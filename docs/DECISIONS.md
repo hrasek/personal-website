@@ -89,6 +89,35 @@ Entries D1 to D5 were made before this log existed and are recorded here on
   update both the repository and the claude.ai project.
 - **Why:** Claude Code works locally and can only see the repository.
 
+## D10: SvelteKit 3, configured in `vite.config.ts` (5 November 2026)
+
+- **Decision:** the project was created with `sv create` (sv 1.3.0) and uses
+  SvelteKit 3. The adapter (`adapter-static`) and the Vitest setup live in
+  `vite.config.ts`. All pages are prerendered via `src/routes/+layout.ts`.
+- **Why:** SvelteKit 3 no longer supports `svelte.config.js`, so the spec's
+  repository structure was updated.
+
+## D11: Unit tests in Node only (5 November 2026)
+
+- **Decision:** Vitest runs in the Node environment. The browser mode the
+  scaffold added (Playwright with Chromium) was removed. `npm test` runs
+  `vitest run --passWithNoTests`, so CI passes before the first test exists.
+- **Why:** the planned tests (parsing the chess API responses) don't need a
+  browser, and CI stays fast without downloading Chromium.
+- **Later:** component tests in a browser can be added in their own PR.
+
+## D12: Node.js 24 (5 November 2026)
+
+- **Decision:** `.nvmrc` pins Node.js 24, which Cloudflare Pages and
+  `actions/setup-node` both read. `package.json` has
+  `"engines": { "node": ">=24" }`, and `.npmrc` has `engine-strict=true`,
+  so `npm install` refuses an older Node locally.
+- **Why:** 24 is an LTS line and is what I have installed (24.14.1).
+  Without a pin, Cloudflare would build with its default (22.16.0, per its
+  build image docs on 5 November 2026). The Cloudflare v3 build image does
+  not read `engines`, so the `.nvmrc` file is what counts there.
+- **Later:** move to Node 26 (Active LTS) in its own PR.
+
 ## Open
 
 See [SPEC.md](SPEC.md), section 12: domain, licence, photo, blog, which

@@ -24,7 +24,21 @@ It is one scrolling static page used for self-presentation.
 
 ## Commands
 
-<!-- TODO: fill in after the SvelteKit scaffold. -->
+- `npm run dev`: dev server
+- `npm run check`: type check (svelte-check)
+- `npm run lint`: Prettier check + ESLint
+- `npm run format`: format with Prettier
+- `npm test`: Vitest, single run (Node environment only)
+- `npm run build`: static build into `build/`
+
+Before proposing a commit, run `check`, `lint`, `test` and `build`.
+
+## Project notes
+
+- SvelteKit 3: configuration lives in `vite.config.ts`. There is no
+  `svelte.config.js`.
+- All pages are prerendered (`src/routes/+layout.ts`).
+- Tests run in Node only, without browser mode or Playwright.
 
 ## Scope at launch
 
