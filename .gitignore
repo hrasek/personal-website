@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+
+# Build output
+/build/
+/.svelte-kit/
+/package/
+.output/
+
+# Cloudflare (local dev state and local secrets)
+.wrangler/
+.dev.vars
+.dev.vars.*
+
+# Environment files (keep example files)
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Tests and coverage
+coverage/
+test-results/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editors and OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Claude Code personal settings
+.claude/settings.local.json
+CLAUDE.local.md
