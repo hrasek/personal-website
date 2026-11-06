@@ -20,6 +20,9 @@ Entries D1 to D5 were made before this log existed and are recorded here on
 
 ## D2: Hosting and repository
 
+> Hosting part superseded by D13 (6 November 2026). Repository and the
+> GitHub Actions checks are unchanged.
+
 - **Decision:** Cloudflare Pages hosts the site and deploys every push to
   `main`. The repository `personal-website` on GitHub is public; it will be
   renamed to match the domain later. GitHub Actions run checks only.
@@ -32,6 +35,9 @@ Entries D1 to D5 were made before this log existed and are recorded here on
 - **Why:** less to build and maintain. A plain email link avoids spam.
 
 ## D4: Chess ratings
+
+> Where the function runs is superseded by D13: a managed Azure Function
+> instead of a Cloudflare Pages Function. The behaviour below is unchanged.
 
 - **Decision:** one Cloudflare Pages Function, `/api/chess`, returns
   Chess.com ratings (cached 1 hour) and the FIDE classical rating (cached
@@ -108,6 +114,9 @@ Entries D1 to D5 were made before this log existed and are recorded here on
 
 ## D12: Node.js 24 (5 November 2026)
 
+> The Cloudflare details are obsolete since D13. The pin itself stays:
+> GitHub Actions and the Azure pipeline both use `.nvmrc`.
+
 - **Decision:** `.nvmrc` pins Node.js 24, which Cloudflare Pages and
   `actions/setup-node` both read. `package.json` has
   `"engines": { "node": ">=24" }`, and `.npmrc` has `engine-strict=true`,
@@ -118,7 +127,50 @@ Entries D1 to D5 were made before this log existed and are recorded here on
   not read `engines`, so the `.nvmrc` file is what counts there.
 - **Later:** move to Node 26 (Active LTS) in its own PR.
 
+## D13: Azure Static Web Apps and Azure Pipelines (6 November 2026)
+
+- **Decision:**
+  - Hosting moves from Cloudflare Pages to **Azure Static Web Apps, Free
+    plan**.
+  - **Azure Pipelines** builds the site and deploys it after every merge to
+    `main`. The pipeline lives in `azure-pipelines.yml` and runs in a
+    **private** Azure DevOps project.
+  - **GitHub Actions keeps the checks** on every pull request (no change).
+  - The chess API becomes a **managed Azure Function** in the Static Web App
+    (`api/` folder). It runs on Node.js 22; the site still builds on Node 24.
+- **Why:** the site's own deployment shows the Azure DevOps skill from my CV
+  in practice. The cost stays at zero; only the domain costs money.
+- **Facts checked on 6 November 2026** (Microsoft docs):
+  - Static Web Apps Free: 100 GB bandwidth per month per subscription, no
+    paid overage, 250 MB per environment, 3 preview environments, 2 custom
+    domains, free SSL, no SLA (intended for personal projects).
+  - Deployment from Azure Pipelines uses the `AzureStaticWebApp@0` task
+    (Linux agents only). We build ourselves and deploy with
+    `skip_app_build: true`. The deployment token is a secret pipeline
+    variable, never in the repository.
+  - Managed functions support Node.js up to 22 (`node:22`).
+  - Azure Pipelines, private project: 1 Microsoft-hosted parallel job,
+    1,800 minutes per month, 60 minutes per run. Confirmed active in my
+    organization; no grant request needed.
+  - New Azure DevOps organizations can no longer create public projects, so
+    the project is private. The pipeline runs aren't public; the YAML in
+    the public GitHub repository is what shows the work.
+- **Open, to verify in later PRs:**
+  - how to cache the chess API responses (1 hour and 24 hours) on managed
+    Azure Functions, and whether managed functions add any cost on the
+    Free plan
+  - whether deploy results can be shown on GitHub (commit status or README
+    badge) for a private Azure DevOps project
+  - email forwarding for the domain, which was planned with Cloudflare
+    Email Routing and now depends on the registrar
+- **Rejected:** Kubernetes with Argo CD. A cluster costs money every month
+  and needs maintenance, which is too much for a static page. Better shown
+  in a separate project that needs it, featured on the site.
+- **Supersedes:** D2 (hosting part), D4 (where the function runs) and the
+  Cloudflare details of D12.
+
 ## Open
 
 See [SPEC.md](SPEC.md), section 12: domain, licence, photo, blog, which
-projects to show, chess accounts, interactive board.
+projects to show, chess accounts, interactive board, email forwarding.
+Also the open points listed in D13.

@@ -19,8 +19,9 @@ It is one scrolling static page used for self-presentation.
 - Content (projects, chess fallback values) in local JSON or Markdown under
   `src/lib/data/`. Components don't hard-code content.
 - Self-hosted fonts (Inter, JetBrains Mono). No third-party requests at load.
-- Hosting: Cloudflare Pages. GitHub Actions run checks only; Cloudflare
-  deploys.
+- Hosting: Azure Static Web Apps (Free plan). GitHub Actions run the checks;
+  Azure Pipelines (`azure-pipelines.yml`) builds and deploys after a merge to
+  `main`.
 
 ## Commands
 
@@ -46,11 +47,14 @@ Before proposing a commit, run `check`, `lint`, `test` and `build`.
   Publication, Skills, Beyond code (chess), Contact, Footer.
 - Not at launch: blog, football section, contact form.
 
-## Chess ratings (`functions/api/chess.ts`)
+## Chess ratings (`api/`)
 
-- One Cloudflare Pages Function at `/api/chess` returns Chess.com ratings
-  (cached 1 hour) and the FIDE classical rating (cached 24 hours, ChessTools
-  API).
+- One managed Azure Function in the Static Web App, at `/api/chess`, returns
+  Chess.com ratings (cached 1 hour) and the FIDE classical rating (cached
+  24 hours, ChessTools API).
+- Managed functions support Node.js 22 at most (`"apiRuntime": "node:22"`),
+  so the function code must run on Node 22 even though the site builds on
+  Node 24.
 - Send Chess.com requests one at a time, with an identifying User-Agent.
   Don't put an email address in it.
 - The page ships stored fallback values (`chess.json`) and keeps them if an
@@ -76,7 +80,8 @@ Before proposing a commit, run `check`, `lint`, `test` and `build`.
 
 - Never put secrets, tokens or personal email addresses into code, docs,
   commits or requests. Neither chess API needs a key. If one ever does, it
-  goes into the Cloudflare function's secrets, never into the repository.
+  goes into the Static Web App's application settings, never into the
+  repository.
 
 ## Git workflow (project-specific)
 

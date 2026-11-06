@@ -7,10 +7,8 @@ node_modules/
 /package/
 .output/
 
-# Cloudflare (local dev state and local secrets)
-.wrangler/
-.dev.vars
-.dev.vars.*
+# Azure Functions local settings (may contain secrets)
+local.settings.json
 
 # Environment files (keep example files)
 .env
