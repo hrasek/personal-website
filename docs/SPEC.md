@@ -1,6 +1,6 @@
 # Personal Website – Design & Technical Specification
 
-Martin Hošek · Version 0.2 · November 2026
+Martin Hošek · Version 0.3 · November 2026
 
 > This file is the repository copy of the specification. Keep it in sync with
 > the project copy on claude.ai. Decisions and their reasons are logged in
@@ -19,7 +19,7 @@ The website is the extended version of my one-page CV. The CV stays short; the w
 
 **Non-goals (for version 1)**
 
-- No server of my own, no user accounts, no database (one small edge function serves the chess ratings).
+- No server of my own, no user accounts, no database (one small serverless function serves the chess ratings).
 - No blog at launch (can be added later).
 - No contact form; a plain email link avoids spam and maintenance.
 
@@ -99,7 +99,7 @@ The site is a single scrolling page with anchor navigation. Sections in order:
 
 **Alternative considered:** Astro, if a Markdown blog becomes important. Python backends (Flask, Django) and Laravel were rejected because a portfolio does not need a server.
 
-**Chess ratings:** the page stays static, and one small edge function (`/api/chess`, a Cloudflare Pages Function) supplies two live values. The Chess.com Published-Data API gives the online rating (no key; requests are sent one at a time, with an identifying User-Agent). The ChessTools ratings API gives the official FIDE rating for my FIDE ID. The function caches Chess.com for 1 hour and FIDE for 24 hours, because FIDE publishes rating lists monthly, and returns both values as one JSON response.
+**Chess ratings:** the page stays static, and one small serverless function (`/api/chess`, a managed Azure Function in the Static Web App) supplies two live values. The Chess.com Published-Data API gives the online rating (no key; requests are sent one at a time, with an identifying User-Agent). The ChessTools ratings API gives the official FIDE rating for my FIDE ID. The function caches Chess.com for 1 hour and FIDE for 24 hours, because FIDE publishes rating lists monthly, and returns both values as one JSON response. How to implement the caching on managed Azure Functions is still to be verified (see D13). Managed functions support Node.js up to 22, so the function targets Node 22.
 
 **Fallback:** the page ships with the last known ratings and their date in `chess.json`, shows them immediately, and replaces them when the live response arrives. If either API fails, the old value stays visible.
 
@@ -127,9 +127,9 @@ The values above come from the real responses for my accounts. The function read
 ## 6. URL, domain and hosting
 
 - **Preferred domain:** martinhosek.cz (to be checked for availability). Alternatives: martinhosek.dev, hosek.dev.
-- **Hosting:** Cloudflare Pages (chosen because it also runs the chess ratings function) (free, HTTPS included).
-- **Deployment:** push to the `main` branch on GitHub triggers an automatic build and deploy.
-- **Email:** a simple address on the domain (for example martin@martinhosek.cz) forwarded to my main mailbox.
+- **Hosting:** Azure Static Web Apps, Free plan (free SSL, up to 2 custom domains). It also runs the chess function as a managed Azure Function.
+- **Deployment:** a merge to `main` triggers the Azure pipeline, which builds the site and deploys it.
+- **Email:** a simple address on the domain (for example martin@martinhosek.cz) forwarded to my main mailbox. How to forward it depends on the registrar (open decision).
 - **Estimated cost:** domain about 10 to 20 EUR per year; hosting free.
 
 ## 7. Repository structure
@@ -142,11 +142,13 @@ personal-website/
 │  ├─ lib/data/projects.json     # project content, chess.json
 │  └─ app.css                    # theme variables, base styles
 ├─ static/                       # CV.pdf, favicon, social preview image
-├─ functions/api/chess.ts        # edge function: Chess.com + FIDE ratings, cached
+├─ api/                          # managed Azure Functions (Node 22): /api/chess
 ├─ docs/
 │  ├─ SPEC.md                    # this specification
 │  └─ DECISIONS.md               # decision log
-├─ .github/workflows/ci.yml      # CI checks on pull requests
+├─ .github/workflows/ci.yml      # CI checks on pull requests (GitHub Actions)
+├─ azure-pipelines.yml           # build and deploy to Azure Static Web Apps
+├─ staticwebapp.config.json      # Static Web Apps config (API runtime, headers)
 ├─ vite.config.ts                # SvelteKit 3 config, static adapter, Vitest
 ├─ CLAUDE.md                     # instructions for Claude Code
 └─ README.md
@@ -161,26 +163,28 @@ personal-website/
 
 ## 9. Deployment and costs
 
-The site is published by connecting the GitHub repository to Cloudflare Pages: every push to `main` builds and deploys it automatically. The only running cost is the domain name.
+GitHub Actions check every pull request. After a merge to `main`, Azure Pipelines builds the site and deploys it to Azure Static Web Apps. The only running cost is the domain name.
 
-| Part                       | Cost                        | Note                                                                                                                                |
-| -------------------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| Hosting (Cloudflare Pages) | Free                        | Static assets are free and unlimited; the free plan allows 500 builds per month, one at a time                                      |
-| Edge function `/api/chess` | Free                        | 100,000 requests per day shared with Workers; the site needs far fewer, and at the limit the page shows the stored fallback ratings |
-| GitHub Actions             | Free                        | Free for standard runners in public repositories, so the repository stays public                                                    |
-| Domain                     | about 10 to 25 EUR per year | My estimate; check the price at the registrar before buying                                                                         |
+| Part                                    | Cost                        | Note                                                                                                                                   |
+| --------------------------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Hosting (Azure Static Web Apps, Free)   | Free                        | 100 GB bandwidth per month per subscription, no paid overage; 250 MB per environment; 3 preview environments; 2 custom domains; no SLA |
+| Chess function (managed Azure Function) | Free (to verify)            | Runs inside the Static Web App on Node.js 22; whether it adds any cost on the Free plan is still to be verified                        |
+| Azure Pipelines (private project)       | Free                        | 1 Microsoft-hosted parallel job, 1,800 minutes per month, 60 minutes per run; confirmed active in my organization                      |
+| GitHub Actions                          | Free                        | Free for standard runners in public repositories, so the repository stays public                                                       |
+| Domain                                  | about 10 to 25 EUR per year | My estimate; check the price at the registrar before buying                                                                            |
 
-Cost figures come from the official [Cloudflare Pages limits](https://developers.cloudflare.com/pages/platform/limits), [Pages Functions pricing](https://developers.cloudflare.com/pages/functions/pricing/index.md) and [GitHub Actions billing](https://docs.github.com/en/actions/reference/usage-limits-billing-and-administration) pages, read on 4 November 2026. Check them again before launch.
+Figures come from the official Microsoft pages [Static Web Apps quotas](https://learn.microsoft.com/azure/static-web-apps/quotas), [Static Web Apps plans](https://learn.microsoft.com/azure/static-web-apps/plans), [Static Web Apps languages and runtimes](https://learn.microsoft.com/azure/static-web-apps/languages-runtimes) and [Azure Pipelines parallel jobs](https://learn.microsoft.com/azure/devops/pipelines/licensing/concurrent-jobs), read on 6 November 2026, and from the [GitHub Actions billing](https://docs.github.com/en/actions/reference/usage-limits-billing-and-administration) page, read on 4 November 2026. Check them again before launch.
 
 **Deployment steps**
 
-1. Create a public GitHub repository and push the code. The repository holds no secrets, and none are needed because neither chess API requires a key.
-2. Create a free Cloudflare account, open Workers & Pages, create a Pages project and connect the repository.
-3. Enter the build settings: command `npm run build`, output folder `build` (static adapter). The `functions/` folder is picked up automatically.
-4. Run the first deploy. The site appears at `<project>.pages.dev` with HTTPS; test it there, including `/api/chess`.
-5. Buy the domain, add it under Custom domains in the Pages project and follow the DNS instructions. HTTPS certificates are automatic.
-6. Optional: forward `martin@<domain>` to my main mailbox with Cloudflare Email Routing.
-7. From then on, a push to `main` is a production deploy, and every other branch or pull request gets its own preview address.
+1. Public GitHub repository (done). It holds no secrets.
+2. Azure DevOps organization with a private project (done). New organizations can no longer create public projects.
+3. In the Azure portal, create a Static Web App on the Free plan. Choose a deployment source other than GitHub, so Azure doesn't add its own GitHub Actions workflow (to be confirmed when we create it).
+4. Copy the Static Web App's deployment token and store it as a secret variable in the Azure pipeline, never in the repository.
+5. Add `azure-pipelines.yml`: on a push to `main`, install Node from `.nvmrc`, run `npm ci` and `npm run build`, then deploy `build/` and `api/` with the `AzureStaticWebApp@0` task (`skip_app_build: true`).
+6. Create the pipeline in Azure DevOps from the GitHub repository and run the first deploy. The site appears at its `*.azurestaticapps.net` address with HTTPS; test it there, including `/api/chess`.
+7. Buy the domain and add it as a custom domain in the Static Web App. HTTPS certificates are free.
+8. Optional later: preview deployments for pull requests (the Free plan allows 3 preview environments).
 
 **Branch protection (active since 5 November 2026)**
 
@@ -188,7 +192,7 @@ A GitHub ruleset on `main` requires a pull request for every change (0 required 
 
 **GitHub Actions (checks only)**
 
-Cloudflare builds and deploys the site, so Actions only run quality checks on every pull request and every push to `main`. A failed check shows as a red mark before anything is merged. There are no scheduled jobs, because the ratings come from the edge function.
+Azure Pipelines builds and deploys the site, so Actions only run quality checks on every pull request and every push to `main`. A failed check shows as a red mark before anything is merged. There are no scheduled jobs, because the ratings come from the chess function.
 
 The workflow is `.github/workflows/ci.yml`. It uses `actions/checkout@v6` and `actions/setup-node@v6`, reads the Node version from `.nvmrc`, caches npm, and runs one job, `checks`. That job name is the required status check in the ruleset.
 
@@ -222,3 +226,4 @@ The steps are: install dependencies (`npm ci`), lint, type check, run the unit t
 - Which projects to show publicly
 - Which Chess.com username and FIDE ID to show
 - Whether to show an interactive board with a favourite game, or only profile link and rating
+- How to forward email for the domain (depends on the registrar)

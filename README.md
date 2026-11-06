@@ -11,8 +11,9 @@ for a software engineer with a PhD in physics.
 
 - [SvelteKit](https://svelte.dev/docs/kit) with the static adapter, TypeScript
 - Plain CSS with CSS variables (light and dark mode)
-- One Cloudflare Pages Function, `/api/chess`, for live chess ratings
-- Hosting on Cloudflare Pages; GitHub Actions run checks only
+- One managed Azure Function, `/api/chess`, for live chess ratings
+- Hosting on Azure Static Web Apps (Free plan), deployed by Azure Pipelines
+- GitHub Actions run the checks on every pull request
 
 ## Getting started
 
@@ -35,9 +36,13 @@ The planned layout is described in [docs/SPEC.md](docs/SPEC.md), section 7.
 
 ## Deployment
 
-Cloudflare Pages builds and deploys every push to `main`. Every other branch
-and every pull request gets its own preview URL. GitHub Actions only run the
-checks (lint, type check, tests, build).
+Two systems, each with one job:
+
+- **GitHub Actions** (`.github/workflows/ci.yml`) run the checks on every pull
+  request and push to `main`: lint, type check, tests, build.
+- **Azure Pipelines** (`azure-pipelines.yml`, in a private Azure DevOps
+  project) builds the site after every merge to `main` and deploys it to
+  Azure Static Web Apps.
 
 ## Contributing workflow
 
