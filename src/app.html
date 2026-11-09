@@ -4,6 +4,23 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="text-scale" content="scale" />
+		<meta name="color-scheme" content="light dark" />
+		<!-- TODO(content): final title and description in the SEO PR -->
+		<title>Martin Hošek</title>
+		<meta name="description" content="Software engineer with a PhD in physics." />
+		<script>
+			// Set the theme before the first paint to avoid a flash of the wrong colours.
+			// Same logic as resolveTheme() in src/lib/theme.ts; keep both in sync.
+			(function () {
+				var saved = null;
+				try {
+					saved = localStorage.getItem('theme');
+				} catch (e) {}
+				var dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+				var theme = saved === 'light' || saved === 'dark' ? saved : dark ? 'dark' : 'light';
+				document.documentElement.dataset.theme = theme;
+			})();
+		</script>
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">
