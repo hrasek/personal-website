@@ -1,0 +1,26 @@
+[
+	{
+		"title": "[Project 1: RAG chatbot demo]",
+		"description": "[Two sentences: the problem, what you built, the outcome.]",
+		"tags": ["Python", "[LLM]", "[vector DB]"],
+		"url": null
+	},
+	{
+		"title": "[Project 2: Web scraper]",
+		"description": "[Two sentences: target data, challenges, how it runs.]",
+		"tags": ["Python", "Selenium", "Docker"],
+		"url": null
+	},
+	{
+		"title": "[Project 3: Data analysis]",
+		"description": "[Two sentences: dataset, question, result.]",
+		"tags": ["Python", "pandas", "matplotlib"],
+		"url": null
+	},
+	{
+		"title": "This website",
+		"description": "[Two sentences: design decisions, performance, accessibility.]",
+		"tags": ["SvelteKit", "CSS", "Azure Static Web Apps"],
+		"url": "https://github.com/hrasek/personal-website"
+	}
+]

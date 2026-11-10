@@ -1,0 +1,6 @@
+[
+	{ "group": "Languages", "items": ["Python", "SQL", "JavaScript", "Matlab"] },
+	{ "group": "Web and backend", "items": ["Laravel", "Svelte", "Selenium"] },
+	{ "group": "Data", "items": ["numpy", "pandas", "matplotlib"] },
+	{ "group": "Tools", "items": ["Docker", "Git", "Azure DevOps", "LaTeX", "LabVIEW"] }
+]
