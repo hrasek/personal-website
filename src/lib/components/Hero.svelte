@@ -1,5 +1,6 @@
 <script lang="ts">
 	import profile from '../data/profile.json';
+	import BrandIcon from './BrandIcon.svelte';
 
 	// Decorative 8 x 8 board; alternating squares.
 	const squares = Array.from({ length: 64 }, (_, i) => (Math.floor(i / 8) + i) % 2 === 1);
@@ -21,9 +22,13 @@
 				<span class="btn btn-secondary placeholder" aria-disabled="true"> Download CV (PDF) </span>
 			{/if}
 			<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- external URL -->
-			<a class="text-link" href={profile.links.github} rel="me">GitHub</a>
+			<a class="text-link" href={profile.links.github} rel="me"
+				><BrandIcon name="github" /><span>GitHub</span></a
+			>
 			<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- external URL -->
-			<a class="text-link" href={profile.links.linkedin} rel="me">LinkedIn</a>
+			<a class="text-link" href={profile.links.linkedin} rel="me"
+				><BrandIcon name="linkedin" /><span>LinkedIn</span></a
+			>
 		</div>
 	</div>
 
@@ -64,9 +69,20 @@
 	.text-link {
 		display: inline-flex;
 		align-items: center;
+		gap: var(--space-2);
 		min-height: 50px;
 		padding: 0 var(--space-3);
 		font-weight: 500;
+		text-decoration: none;
+	}
+
+	.text-link span {
+		text-decoration: underline;
+		text-underline-offset: 0.2em;
+	}
+
+	.text-link:hover {
+		color: var(--color-accent);
 	}
 
 	.placeholder {
