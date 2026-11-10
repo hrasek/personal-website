@@ -191,6 +191,12 @@ a {
 	padding-block: var(--section-pad);
 }
 
+/* Alternating background band, as in the mockup. */
+.band {
+	background: var(--color-surface);
+	border-block: 1px solid var(--color-border);
+}
+
 /* ---------- Text helpers ---------- */
 .eyebrow {
 	font-family: var(--font-mono);
