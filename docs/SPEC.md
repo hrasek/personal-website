@@ -94,7 +94,7 @@ The site is a single scrolling page with anchor navigation. Sections in order:
 | Styling   | Plain CSS with CSS variables (theme tokens)      | Simple, no dependencies, easy dark mode            |
 | Content   | Project data in a local JSON or Markdown file    | Easy to edit without touching components           |
 | Fonts     | Self-hosted Inter and JetBrains Mono             | Faster, no third-party requests                    |
-| Icons     | Inline SVG (Lucide or Simple Icons)              | No icon font needed                                |
+| Icons     | Inline SVG; brand logos from Font Awesome Free   | No icon font needed; CC BY 4.0, credited in code   |
 | Analytics | Plausible or Cloudflare Web Analytics (optional) | Privacy-friendly, no cookie banner                 |
 
 **Alternative considered:** Astro, if a Markdown blog becomes important. Python backends (Flask, Django) and Laravel were rejected because a portfolio does not need a server.

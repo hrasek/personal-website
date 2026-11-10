@@ -264,3 +264,8 @@ a {
 .btn-secondary:hover {
 	border-color: var(--color-accent);
 }
+
+/* Anchor targets stop below the sticky top bar. */
+section[id] {
+	scroll-margin-top: 5.5rem;
+}

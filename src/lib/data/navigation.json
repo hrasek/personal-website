@@ -1,0 +1,8 @@
+[
+	{ "id": "about", "label": "About" },
+	{ "id": "projects", "label": "Projects" },
+	{ "id": "experience", "label": "Experience" },
+	{ "id": "skills", "label": "Skills" },
+	{ "id": "chess", "label": "Chess" },
+	{ "id": "contact", "label": "Contact" }
+]
