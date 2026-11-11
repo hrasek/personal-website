@@ -1,13 +1,13 @@
 {
 	"jobs": [
 		{
-			"period": "2024 — present",
+			"period": "May 2024 — Oct 2026",
 			"role": "Software engineer",
 			"organization": "WANTED.solutions s.r.o.",
 			"details": "Scrapers, chatbots with RAG, Azure DevOps, backend development"
 		},
 		{
-			"period": "2018 — 2023",
+			"period": "Sep 2018 — Aug 2023",
 			"role": "Doctoral student",
 			"organization": "Institute of Scientific Instruments, Czech Academy of Sciences",
 			"details": "Absorption spectroscopy experiments"
@@ -16,12 +16,53 @@
 			"period": "Feb — Aug 2019",
 			"role": "Research internship",
 			"organization": "Istituto nazionale di ricerca metrologica, Turin",
-			"details": "Saturated absorption spectroscopy"
+			"details": "Calculating saturated absorption spectroscopy parameters"
 		}
 	],
-	"publication": {
-		"title": "Article in Optics Letters",
-		"summary": null,
-		"doi": "10.1364/OL.467633"
-	}
+	"publications": [
+		{
+			"type": "journal",
+			"title": "Absolute frequencies of H¹³C¹⁴N hydrogen cyanide transitions in the 1.5-µm region with the saturated spectroscopy and a sub-kHz scanning laser",
+			"venue": "Optics Letters",
+			"year": 2022,
+			"firstAuthor": false,
+			"doi": "10.1364/OL.467633"
+		},
+		{
+			"type": "conference",
+			"title": "Saturation Spectroscopy of H¹³C¹⁴N Absorption Lines",
+			"venue": "2023 Joint Conference of the European Frequency and Time Forum and IEEE International Frequency Control Symposium (EFTF/IFCS)",
+			"venueShort": "EFTF/IFCS 2023",
+			"year": 2023,
+			"firstAuthor": true,
+			"doi": "10.1109/EFTF/IFCS57587.2023.10272040"
+		},
+		{
+			"type": "conference",
+			"title": "Measurement of the Hydrogen Cyanide Absorption Lines’ Centers with the Potential for Mise en Pratique",
+			"venue": "2021 Joint Conference of the European Frequency and Time Forum and IEEE International Frequency Control Symposium (EFTF/IFCS)",
+			"venueShort": "EFTF/IFCS 2021",
+			"year": 2021,
+			"firstAuthor": true,
+			"doi": "10.1109/EFTF/IFCS52194.2021.9604261"
+		},
+		{
+			"type": "conference",
+			"title": "High-precision measurement of the center frequencies of the hydrogen cyanide (HCN) hyperfine transitions in the 1.5 μm wavelength band",
+			"venue": "22nd Polish-Slovak-Czech Optical Conference on Wave and Quantum Aspects of Contemporary Optics",
+			"venueShort": "22nd Polish-Slovak-Czech Optical Conference",
+			"year": 2022,
+			"firstAuthor": true,
+			"doi": "10.1117/12.2664209"
+		},
+		{
+			"type": "conference",
+			"title": "Investigating the use of the hydrogen cyanide (HCN) as an absorption media for laser spectroscopy",
+			"venue": "21st Czech-Polish-Slovak Optical Conference on Wave and Quantum Aspects of Contemporary Optics",
+			"venueShort": "21st Czech-Polish-Slovak Optical Conference",
+			"year": 2018,
+			"firstAuthor": true,
+			"doi": "10.1117/12.2517761"
+		}
+	]
 }

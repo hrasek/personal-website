@@ -1,7 +1,7 @@
 {
 	"name": "Martin Hošek",
 	"role": "Software engineer · PhD in physics",
-	"intro": "I build scrapers, RAG chatbots and backend systems in Python, with an analytical background from years of laser spectroscopy.",
+	"intro": "I build web scrapers, RAG chatbots on OpenAI and Anthropic models, and backend systems in Python. My analytical background comes from years of data analysis during my PhD in laser spectroscopy.",
 	"links": {
 		"github": "https://github.com/hrasek",
 		"linkedin": "https://www.linkedin.com/in/martin-ho%C5%A1ek-a1a188115/"

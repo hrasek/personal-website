@@ -1,25 +1,31 @@
 [
 	{
-		"title": "[Project 1: RAG chatbot demo]",
-		"description": "[Two sentences: the problem, what you built, the outcome.]",
-		"tags": ["Python", "[LLM]", "[vector DB]"],
+		"title": "Rating Radar",
+		"description": "A platform that lets businesses follow and evaluate customer reviews across all their branches. I built the collection of reviews from public review platforms and the microservices that let users reply to reviews directly from the app.",
+		"tags": ["Python", "Web scraping", "Selenium", "Laravel", "Docker"],
+		"url": "https://rating-radar.ws"
+	},
+	{
+		"title": "Internal documentation chatbot",
+		"description": "A chatbot that answers employees' questions about internal documentation and cites the exact passages it used. Documents are split into chunks, embedded and stored in an Azure vector index, with Azure AI Search for retrieval.",
+		"tags": ["Svelte", "LLM", "Docker"],
 		"url": null
 	},
 	{
-		"title": "[Project 2: Web scraper]",
-		"description": "[Two sentences: target data, challenges, how it runs.]",
-		"tags": ["Python", "Selenium", "Docker"],
-		"url": null
+		"title": "Centrum rovnátek",
+		"description": "A website that helps patients understand the different types of braces and find a suitable orthodontic practice. I aggregated public data about the clinics and built a chatbot that explains treatment options and recommends clinics matching the patient's needs.",
+		"tags": ["Python", "Svelte", "Web scraping", "Selenium", "LLM", "Docker"],
+		"url": "https://centrumrovnatek.cz/"
 	},
 	{
-		"title": "[Project 3: Data analysis]",
-		"description": "[Two sentences: dataset, question, result.]",
-		"tags": ["Python", "pandas", "matplotlib"],
+		"title": "News monitoring service",
+		"description": "A service that processes daily news from online sources and uses an LLM to compile a report of the most important stories in the customer's fields of interest. The report is emailed every day by a scheduled Azure pipeline.",
+		"tags": ["Python", "Web scraping", "Selenium", "LLM", "Docker"],
 		"url": null
 	},
 	{
 		"title": "This website",
-		"description": "[Two sentences: design decisions, performance, accessibility.]",
+		"description": "A static personal website that goes a bit deeper than my CV. The priorities were a simple design, fast loading and good accessibility.",
 		"tags": ["SvelteKit", "CSS", "Azure Static Web Apps"],
 		"url": "https://github.com/hrasek/personal-website"
 	}

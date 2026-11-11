@@ -1,9 +1,9 @@
 <script lang="ts">
 	import experience from '../data/experience.json';
-	import ExternalLink from './ExternalLink.svelte';
+	import Publications from './Publications.svelte';
 	import SectionHeading from './SectionHeading.svelte';
 
-	const { jobs, publication } = experience;
+	const { jobs } = experience;
 </script>
 
 <section id="experience" class="section band" aria-labelledby="experience-title">
@@ -22,19 +22,7 @@
 			{/each}
 		</ol>
 
-		<article class="publication" aria-labelledby="publication-title">
-			<p class="eyebrow">Publication</p>
-			<h3 id="publication-title">{publication.title}</h3>
-			{#if publication.summary}
-				<p class="muted">{publication.summary}</p>
-			{:else}
-				<!-- TODO(content): one plain-language sentence on what the paper shows -->
-				<p class="muted">[One plain-language sentence on what the paper shows.]</p>
-			{/if}
-			<ExternalLink href="https://doi.org/{publication.doi}" class="doi-link">
-				doi.org/{publication.doi} →
-			</ExternalLink>
-		</article>
+		<Publications />
 	</div>
 </section>
 
@@ -77,30 +65,5 @@
 
 	h3 {
 		font-size: 1.25rem;
-	}
-
-	.publication {
-		max-width: 900px;
-		margin-top: var(--space-7);
-		padding: var(--space-6) var(--space-5);
-		border: 1px solid var(--color-border);
-		border-radius: var(--radius-md);
-		background: var(--color-bg);
-	}
-
-	.publication h3 {
-		margin: var(--space-2) 0 var(--space-3);
-	}
-
-	.publication :global(.doi-link) {
-		display: inline-block;
-		margin-top: var(--space-3);
-		color: var(--color-accent);
-		font-weight: 600;
-		text-decoration: none;
-	}
-
-	.publication :global(.doi-link:hover) {
-		text-decoration: underline;
 	}
 </style>
