@@ -1,6 +1,7 @@
 <script lang="ts">
 	import profile from '../data/profile.json';
 	import BrandIcon from './BrandIcon.svelte';
+	import ExternalLink from './ExternalLink.svelte';
 
 	// Decorative 8 x 8 board; alternating squares.
 	const squares = Array.from({ length: 64 }, (_, i) => (Math.floor(i / 8) + i) % 2 === 1);
@@ -21,14 +22,12 @@
 				<!-- TODO(content): add static/cv.pdf and set cvUrl in profile.json -->
 				<span class="btn btn-secondary placeholder" aria-disabled="true"> Download CV (PDF) </span>
 			{/if}
-			<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- external URL -->
-			<a class="text-link" href={profile.links.github} rel="me"
-				><BrandIcon name="github" /><span>GitHub</span></a
-			>
-			<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- external URL -->
-			<a class="text-link" href={profile.links.linkedin} rel="me"
-				><BrandIcon name="linkedin" /><span>LinkedIn</span></a
-			>
+			<ExternalLink href={profile.links.github} class="text-link" rel="me">
+				<BrandIcon name="github" /><span>GitHub</span>
+			</ExternalLink>
+			<ExternalLink href={profile.links.linkedin} class="text-link" rel="me">
+				<BrandIcon name="linkedin" /><span>LinkedIn</span>
+			</ExternalLink>
 		</div>
 	</div>
 
@@ -66,7 +65,7 @@
 		margin-top: var(--space-6);
 	}
 
-	.text-link {
+	.actions :global(.text-link) {
 		display: inline-flex;
 		align-items: center;
 		gap: var(--space-2);
@@ -76,12 +75,12 @@
 		text-decoration: none;
 	}
 
-	.text-link span {
+	.actions :global(.text-link span) {
 		text-decoration: underline;
 		text-underline-offset: 0.2em;
 	}
 
-	.text-link:hover {
+	.actions :global(.text-link:hover) {
 		color: var(--color-accent);
 	}
 
