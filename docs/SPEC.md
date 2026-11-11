@@ -122,7 +122,7 @@ The site is a single scrolling page with anchor navigation. Sections in order:
 }
 ```
 
-The values above come from the real responses for my accounts. The function reads `chess_blitz`, `chess_bullet`, `chess_rapid` and `chess_daily` from the Chess.com stats response, takes `last.rating` and converts `last.date` (a Unix timestamp in seconds) to a date. **Display rule:** the page shows only formats with a game in the last 12 months. Today that means blitz, bullet and daily; rapid is hidden because the last rapid game was in March 2023. Chess960, tactics and puzzle rush are ignored.
+The values above come from the real responses for my accounts. The function reads `chess_blitz`, `chess_bullet`, `chess_rapid` and `chess_daily` from the Chess.com stats response, takes `last.rating` and converts `last.date` (a Unix timestamp in seconds) to a date. **Display rule:** the page shows only formats with a game in the 12 months before `fetchedAt` (not before "now", so the prerendered page and the browser agree). Today that means blitz, bullet and daily; rapid is hidden because the last rapid game was in March 2023. Chess960, tactics and puzzle rush are ignored.
 
 ## 6. URL, domain and hosting
 

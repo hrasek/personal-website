@@ -1,5 +1,6 @@
 <script lang="ts">
 	import About from '#lib/components/About.svelte';
+	import ChessSection from '#lib/components/ChessSection.svelte';
 	import Contact from '#lib/components/Contact.svelte';
 	import Experience from '#lib/components/Experience.svelte';
 	import Footer from '#lib/components/Footer.svelte';
@@ -21,14 +22,7 @@
 	<Experience />
 	<Skills />
 
-	<!-- Placeholder: the chess section comes with the /api/chess function. -->
-	<section id="chess" class="section band" aria-labelledby="chess-title">
-		<div class="container">
-			<p class="eyebrow">05 — Beyond code</p>
-			<h2 id="chess-title">Chess</h2>
-			<p class="muted">TODO: Chess section.</p>
-		</div>
-	</section>
+	<ChessSection />
 
 	<Contact />
 </main>
@@ -56,10 +50,5 @@
 
 	.skip-link:focus {
 		transform: none;
-	}
-
-	#chess h2 {
-		margin-top: var(--space-2);
-		margin-bottom: var(--space-4);
 	}
 </style>
