@@ -2,6 +2,10 @@
 	import projects from '../data/projects.json';
 	import ExternalLink from './ExternalLink.svelte';
 	import SectionHeading from './SectionHeading.svelte';
+
+	function linkLabel(url: string): string {
+		return new URL(url).hostname === 'github.com' ? 'View on GitHub' : 'Visit website';
+	}
 </script>
 
 <section id="projects" class="section" aria-labelledby="projects-title">
@@ -17,10 +21,9 @@
 						{project.tags.join(' · ')}
 					</p>
 					{#if project.url}
-						<ExternalLink href={project.url} class="card-link">View on GitHub →</ExternalLink>
-					{:else}
-						<!-- TODO(content): project link -->
-						<span class="card-link placeholder">[link]</span>
+						<ExternalLink href={project.url} class="card-link">
+							{linkLabel(project.url)} →
+						</ExternalLink>
 					{/if}
 				</li>
 			{/each}
@@ -70,9 +73,5 @@
 
 	.card :global(.card-link:hover) {
 		text-decoration: underline;
-	}
-
-	.placeholder {
-		opacity: 0.6;
 	}
 </style>
