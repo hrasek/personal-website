@@ -1,0 +1,10 @@
+{
+	"chesscom": {
+		"blitz": { "rating": 2254, "lastGame": "2026-07-31" },
+		"bullet": { "rating": 2089, "lastGame": "2026-11-04" },
+		"rapid": { "rating": 2206, "lastGame": "2023-03-01" },
+		"daily": { "rating": 2077, "lastGame": "2026-03-29" }
+	},
+	"fide": { "classical": 2131 },
+	"fetchedAt": "2026-11-04T14:32:31Z"
+}
