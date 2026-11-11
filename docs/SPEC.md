@@ -39,7 +39,7 @@ The site is a single scrolling page with anchor navigation. Sections in order:
 3. **Projects**: 3 to 5 cards. Each card has a title, 2-sentence description, tech tags, and a GitHub or demo link.
    - Client work can only be shown if permitted. Otherwise build small public versions (for example a RAG chatbot over public documents, a scraper with a clean data output).
 4. **Experience**: compact timeline: Software engineer at WANTED.solutions (since May 2024), research at the Institute of Scientific Instruments (2018 to 2023), research internship in Turin (2019).
-5. **Publication**: the Optics Letters article with its DOI link (https://doi.org/10.1364/OL.467633) and a one-sentence plain-language summary.
+5. **Publications** (below the Experience timeline): a count line, the Optics Letters article as a featured card, and the conference papers as a list (newest first, "First author" tag where true). Each item shows title, venue, year and a DOI link; no summaries (decided 11 November 2026). Data in `experience.json`.
 6. **Skills**: grouped lists, no percentage bars.
    - Languages: Python, SQL, JavaScript, Matlab
    - Web and backend: Laravel, Svelte, Selenium
