@@ -1,5 +1,11 @@
 <script lang="ts">
+	import About from '#lib/components/About.svelte';
+	import Contact from '#lib/components/Contact.svelte';
+	import Experience from '#lib/components/Experience.svelte';
+	import Footer from '#lib/components/Footer.svelte';
 	import Hero from '#lib/components/Hero.svelte';
+	import Projects from '#lib/components/Projects.svelte';
+	import Skills from '#lib/components/Skills.svelte';
 	import TopBar from '#lib/components/TopBar.svelte';
 </script>
 
@@ -10,44 +16,24 @@
 
 <main id="main" tabindex="-1">
 	<Hero />
+	<About />
+	<Projects />
+	<Experience />
+	<Skills />
 
-	<!-- Placeholder sections: the anchor links need a target. Filled in later PRs. -->
-	<section id="about" class="section container" aria-labelledby="about-title">
-		<p class="eyebrow">01 — About</p>
-		<h2 id="about-title">From lasers to code</h2>
-		<p class="muted">TODO: About section.</p>
+	<!-- Placeholder: the chess section comes with the /api/chess function. -->
+	<section id="chess" class="section band" aria-labelledby="chess-title">
+		<div class="container">
+			<p class="eyebrow">05 — Beyond code</p>
+			<h2 id="chess-title">Chess</h2>
+			<p class="muted">TODO: Chess section.</p>
+		</div>
 	</section>
 
-	<section id="projects" class="section container" aria-labelledby="projects-title">
-		<p class="eyebrow">02 — Projects</p>
-		<h2 id="projects-title">Selected work</h2>
-		<p class="muted">TODO: Projects section.</p>
-	</section>
-
-	<section id="experience" class="section container" aria-labelledby="experience-title">
-		<p class="eyebrow">03 — Experience</p>
-		<h2 id="experience-title">Where I have worked</h2>
-		<p class="muted">TODO: Experience and Publication.</p>
-	</section>
-
-	<section id="skills" class="section container" aria-labelledby="skills-title">
-		<p class="eyebrow">04 — Skills</p>
-		<h2 id="skills-title">What I work with</h2>
-		<p class="muted">TODO: Skills section.</p>
-	</section>
-
-	<section id="chess" class="section container" aria-labelledby="chess-title">
-		<p class="eyebrow">05 — Beyond code</p>
-		<h2 id="chess-title">Chess</h2>
-		<p class="muted">TODO: Chess section.</p>
-	</section>
-
-	<section id="contact" class="section container" aria-labelledby="contact-title">
-		<p class="eyebrow">06 — Contact</p>
-		<h2 id="contact-title">Let's talk.</h2>
-		<p class="muted">TODO: Contact section.</p>
-	</section>
+	<Contact />
 </main>
+
+<Footer />
 
 <style>
 	main:focus {
@@ -72,7 +58,7 @@
 		transform: none;
 	}
 
-	section h2 {
+	#chess h2 {
 		margin-top: var(--space-2);
 		margin-bottom: var(--space-4);
 	}

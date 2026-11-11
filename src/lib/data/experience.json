@@ -1,0 +1,27 @@
+{
+	"jobs": [
+		{
+			"period": "2024 — present",
+			"role": "Software engineer",
+			"organization": "WANTED.solutions s.r.o.",
+			"details": "Scrapers, chatbots with RAG, Azure DevOps, backend development"
+		},
+		{
+			"period": "2018 — 2023",
+			"role": "Doctoral student",
+			"organization": "Institute of Scientific Instruments, Czech Academy of Sciences",
+			"details": "Absorption spectroscopy experiments"
+		},
+		{
+			"period": "Feb — Aug 2019",
+			"role": "Research internship",
+			"organization": "Istituto nazionale di ricerca metrologica, Turin",
+			"details": "Saturated absorption spectroscopy"
+		}
+	],
+	"publication": {
+		"title": "Article in Optics Letters",
+		"summary": null,
+		"doi": "10.1364/OL.467633"
+	}
+}

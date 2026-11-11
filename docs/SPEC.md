@@ -48,7 +48,7 @@ The site is a single scrolling page with anchor navigation. Sections in order:
 7. **Beyond code**: chess is the main hobby, with floorball and football mentioned in one line.
    - Chess: 2 to 3 sentences on why I play and what it trains (logical and strategic thinking), a link to my Lichess or Chess.com profile with current rating, and an interactive board replaying one favourite game.
    - Other interests: one short line, no separate cards.
-8. **Contact**: email, LinkedIn, GitHub; languages spoken (Czech native, English B2); location.
+8. **Contact**: email, LinkedIn, GitHub; languages spoken (Czech native, English B2). No location (decided 10 November 2026).
 9. **Footer**: copyright, link back to top.
 
 ## 4. Design
