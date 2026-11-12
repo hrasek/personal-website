@@ -28,6 +28,8 @@ npm run format       # format all files with Prettier
 npm test             # unit tests (Vitest, single run)
 npm run build        # production build into build/
 npm run preview      # serve the production build locally
+npm run build:api    # install and build the Azure Functions API in api/
+npm run chess:check  # call the real Chess.com and FIDE APIs and print the result
 ```
 
 ## Project structure

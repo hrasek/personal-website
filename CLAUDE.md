@@ -31,8 +31,10 @@ It is one scrolling static page used for self-presentation.
 - `npm run format`: format with Prettier
 - `npm test`: Vitest, single run (Node environment only)
 - `npm run build`: static build into `build/`
+- `npm run build:api`: install and build the API package in `api/`
+- `npm run chess:check`: call the real chess APIs with the function's code
 
-Before proposing a commit, run `check`, `lint`, `test` and `build`.
+Before proposing a commit, run `check`, `lint`, `test`, `build` and `build:api`.
 
 ## Project notes
 
