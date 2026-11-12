@@ -1,13 +1,33 @@
 <script lang="ts">
-	import { formatDay, ratingCards, type ChessRatings } from '../chess';
+	import { onMount } from 'svelte';
+	import {
+		formatDay,
+		isChessApiResponse,
+		mergeRatings,
+		ratingCards,
+		type ChessRatings
+	} from '../chess';
 	import content from '../data/beyond-code.json';
 	import stored from '../data/chess.json';
 	import ExternalLink from './ExternalLink.svelte';
 	import SectionHeading from './SectionHeading.svelte';
 
-	// Stored values for now; the /api/chess response will replace them in a later PR.
-	const ratings = stored as ChessRatings;
-	const cards = ratingCards(ratings);
+	// Stored values render first (and are all a visitor without JavaScript sees).
+	let ratings = $state<ChessRatings>(stored as ChessRatings);
+	const cards = $derived(ratingCards(ratings));
+
+	// Then ask /api/chess for live values. Any failure keeps the stored values;
+	// during `npm run dev` the endpoint doesn't exist, which is expected.
+	onMount(async () => {
+		try {
+			const response = await fetch('/api/chess', { signal: AbortSignal.timeout(8000) });
+			if (!response.ok) return;
+			const live: unknown = await response.json();
+			if (isChessApiResponse(live)) ratings = mergeRatings(ratings, live);
+		} catch {
+			// Network error, timeout or invalid JSON: keep the stored values.
+		}
+	});
 	const profileUrl = content.chesscomProfileUrl as string | null;
 </script>
 

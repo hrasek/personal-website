@@ -96,3 +96,51 @@ export function ratingCards(data: ChessRatings): RatingCard[] {
 	}
 	return cards;
 }
+
+/** The /api/chess response: a source without data is null. */
+export interface ChessApiResponse {
+	chesscom: ChessRatings['chesscom'] | null;
+	fide: { classical: number } | null;
+	fetchedAt: string | null;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+	return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function isChesscomRating(value: unknown): value is ChesscomRating {
+	return (
+		isRecord(value) &&
+		typeof value.rating === 'number' &&
+		typeof value.lastGame === 'string' &&
+		!Number.isNaN(new Date(value.lastGame).getTime())
+	);
+}
+
+/** Checks the shape strictly, so a broken answer can never replace good stored values. */
+export function isChessApiResponse(value: unknown): value is ChessApiResponse {
+	if (!isRecord(value)) return false;
+	const { chesscom, fide, fetchedAt } = value;
+	const chesscomOk =
+		chesscom === null ||
+		(isRecord(chesscom) &&
+			Object.entries(chesscom).every(
+				([key, entry]) =>
+					(CHESSCOM_FORMATS as readonly string[]).includes(key) && isChesscomRating(entry)
+			));
+	const fideOk = fide === null || (isRecord(fide) && typeof fide.classical === 'number');
+	const fetchedAtOk =
+		fetchedAt === null ||
+		(typeof fetchedAt === 'string' && !Number.isNaN(new Date(fetchedAt).getTime()));
+	// Chess.com data needs its fetch time for the 12-month rule.
+	return chesscomOk && fideOk && fetchedAtOk && (chesscom === null || fetchedAt !== null);
+}
+
+/** Replaces each source only if the live answer has it; otherwise keeps the stored value. */
+export function mergeRatings(stored: ChessRatings, live: ChessApiResponse): ChessRatings {
+	return {
+		chesscom: live.chesscom ?? stored.chesscom,
+		fide: live.fide ?? stored.fide,
+		fetchedAt: live.chesscom && live.fetchedAt ? live.fetchedAt : stored.fetchedAt
+	};
+}
