@@ -69,6 +69,10 @@ Before proposing a commit, run `check`, `lint`, `test`, `build` and `build:api`.
 - Site copy is in English.
 - Never invent facts, project descriptions, numbers, dates or contact
   details. Use clearly marked placeholders: `TODO(content): ...`.
+- The CV is `static/cv.pdf`, a copy of the PDF from my private CV
+  repository. To update it, export the new PDF there and copy it over this
+  file. Never commit a CV version that contains an email, phone number or
+  address: every committed version stays in the public history.
 
 ## Quality targets
 

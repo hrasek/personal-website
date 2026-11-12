@@ -17,7 +17,9 @@
 			<a class="btn btn-primary" href="#projects">See projects</a>
 			{#if profile.cvUrl}
 				<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- static file, not a route -->
-				<a class="btn btn-secondary" href={profile.cvUrl} download>Download CV (PDF)</a>
+				<a class="btn btn-secondary" href={profile.cvUrl} download="Martin-Hosek-CV.pdf"
+					>Download CV (PDF)</a
+				>
 			{:else}
 				<!-- TODO(content): add static/cv.pdf and set cvUrl in profile.json -->
 				<span class="btn btn-secondary placeholder" aria-disabled="true"> Download CV (PDF) </span>
