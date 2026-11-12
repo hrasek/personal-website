@@ -43,6 +43,6 @@ jobs:
 
       - name: Build
         run: npm run build
-        
+
       - name: Build API (Azure Functions)
         run: npm run build:api
