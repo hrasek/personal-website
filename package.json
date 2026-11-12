@@ -20,7 +20,9 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"test:unit": "vitest",
-		"test": "vitest run --passWithNoTests"
+		"test": "vitest run --passWithNoTests",
+		"build:api": "npm ci --prefix api && npm run build --prefix api",
+		"chess:check": "npm run build --prefix api && node scripts/chess-check.mjs"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
