@@ -156,9 +156,8 @@ Entries D1 to D5 were made before this log existed and are recorded here on
     the project is private. The pipeline runs aren't public; the YAML in
     the public GitHub repository is what shows the work.
 - **Open, to verify in later PRs:**
-  - how to cache the chess API responses (1 hour and 24 hours) on managed
-    Azure Functions, and whether managed functions add any cost on the
-    Free plan
+  - whether managed functions add any cost on the Free plan (the caching
+    question is settled in D14)
   - whether deploy results can be shown on GitHub (commit status or README
     badge) for a private Azure DevOps project
   - email forwarding for the domain, which was planned with Cloudflare
@@ -168,6 +167,39 @@ Entries D1 to D5 were made before this log existed and are recorded here on
   in a separate project that needs it, featured on the site.
 - **Supersedes:** D2 (hosting part), D4 (where the function runs) and the
   Cloudflare details of D12.
+
+## D14: Chess API implementation (12 November 2026)
+
+- **Decision:**
+  - `api/` is a separate npm package: TypeScript, Azure Functions Node.js
+    programming model v4, compiled with `tsc`. It runs on Node.js 22 in
+    Static Web Apps (`static/staticwebapp.config.json`, `apiRuntime:
+node:22`); the site and CI stay on Node 24.
+  - Chess.com username `hrasek` and FIDE ID `345652` are in
+    `api/src/lib/config.ts`; application settings `CHESSCOM_USERNAME` and
+    `FIDE_ID` override them. They are public data, not secrets.
+  - Requests are serial (Chess.com first, then FIDE), with a 5-second
+    timeout and the User-Agent
+    `personal-website/1.0 (username: hrasek; +https://github.com/hrasek/personal-website)`.
+  - Cache in memory: Chess.com 1 hour, FIDE 24 hours. A failed refresh
+    keeps the last good value; a source that never succeeded is `null`.
+    The response has `Cache-Control: public, max-age=300`.
+  - The page validates the answer strictly and replaces each source
+    separately; on any error it keeps the stored values from `chess.json`.
+- **Why:** simplest setup that meets the spec without paid services.
+  Serial access to the Chess.com API is unlimited, so extra fetches after
+  a function restart are harmless.
+- **Not chosen:** Azure Table Storage as a shared cache (extra resource and
+  setup for little benefit); Node 24 for the API, which needs a linked
+  Functions app and the paid Standard plan; fetching the ratings at build
+  time with a daily scheduled pipeline (simpler, but ratings up to a day
+  old).
+- **Facts checked on 12 November 2026:** Static Web Apps lists `node:22`
+  as the managed functions runtime; Azure Functions v4 supports Node 22 and
+  24 in standalone Function Apps; Chess.com documents unlimited serial
+  access and asks clients for an identifying User-Agent.
+- **To verify after the first deploy:** that `/api/chess` answers on the
+  live site and that the function logs show no errors.
 
 ## Open
 

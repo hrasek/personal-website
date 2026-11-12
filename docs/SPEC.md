@@ -99,7 +99,7 @@ The site is a single scrolling page with anchor navigation. Sections in order:
 
 **Alternative considered:** Astro, if a Markdown blog becomes important. Python backends (Flask, Django) and Laravel were rejected because a portfolio does not need a server.
 
-**Chess ratings:** the page stays static, and one small serverless function (`/api/chess`, a managed Azure Function in the Static Web App) supplies two live values. The Chess.com Published-Data API gives the online rating (no key; requests are sent one at a time, with an identifying User-Agent). The ChessTools ratings API gives the official FIDE rating for my FIDE ID. The function caches Chess.com for 1 hour and FIDE for 24 hours, because FIDE publishes rating lists monthly, and returns both values as one JSON response. How to implement the caching on managed Azure Functions is still to be verified (see D13). Managed functions support Node.js up to 22, so the function targets Node 22.
+**Chess ratings:** the page stays static, and one small serverless function (`/api/chess`, a managed Azure Function in the Static Web App) supplies two live values. The Chess.com Published-Data API gives the online rating (no key; requests are sent one at a time, with an identifying User-Agent). The ChessTools ratings API gives the official FIDE rating for my FIDE ID. The function caches Chess.com for 1 hour and FIDE for 24 hours, because FIDE publishes rating lists monthly, and returns both values as one JSON response. The cache lives in the function's memory, so it is best effort: a restarted or extra function instance fetches again, which Chess.com allows for serial requests. The response also carries `Cache-Control: public, max-age=300`, so a visitor's browser reuses it for 5 minutes (see D14). Managed functions support Node.js up to 22, so the function runs on Node 22 while the site builds on Node 24.
 
 **Fallback:** the page ships with the last known ratings and their date in `chess.json`, shows them immediately, and replaces them when the live response arrives. If either API fails, the old value stays visible.
 
@@ -141,14 +141,14 @@ personal-website/
 │  ├─ lib/components/            # Hero, ProjectCard, Timeline, Skills, ChessBoard, ...
 │  ├─ lib/data/projects.json     # project content, chess.json
 │  └─ app.css                    # theme variables, base styles
-├─ static/                       # CV.pdf, favicon, social preview image
-├─ api/                          # managed Azure Functions (Node 22): /api/chess
+├─ static/                       # CV.pdf, favicon, social preview image, staticwebapp.config.json (API runtime)
+├─ api/                          # managed Azure Functions (Node 22, own package.json): /api/chess
+├─ scripts/chess-check.mjs       # calls the real chess APIs: npm run chess:check
 ├─ docs/
 │  ├─ SPEC.md                    # this specification
 │  └─ DECISIONS.md               # decision log
 ├─ .github/workflows/ci.yml      # CI checks on pull requests (GitHub Actions)
 ├─ azure-pipelines.yml           # build and deploy to Azure Static Web Apps
-├─ staticwebapp.config.json      # Static Web Apps config (API runtime, headers)
 ├─ vite.config.ts                # SvelteKit 3 config, static adapter, Vitest
 ├─ CLAUDE.md                     # instructions for Claude Code
 └─ README.md
@@ -196,7 +196,7 @@ Azure Pipelines builds and deploys the site, so Actions only run quality checks 
 
 The workflow is `.github/workflows/ci.yml`. It uses `actions/checkout@v6` and `actions/setup-node@v6`, reads the Node version from `.nvmrc`, caches npm, and runs one job, `checks`. That job name is the required status check in the ruleset.
 
-The steps are: install dependencies (`npm ci`), lint, type check, run the unit tests (for example the parsing of the Chess.com and FIDE responses in `chess.ts`), and test the production build. Action versions were checked on 5 November 2026.
+The steps are: install dependencies (`npm ci`), lint, type check, run the unit tests (including the parsing of the Chess.com and FIDE responses in `api/`), test the production build, and build the API package. Action versions were checked on 5 November 2026.
 
 **Optional later:** a Lighthouse CI step to enforce the score target from section 8.
 

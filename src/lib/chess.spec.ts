@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { formatDay, formatMonth, isRecent, ratingCards, type ChessRatings } from './chess';
+import {
+	formatDay,
+	formatMonth,
+	isChessApiResponse,
+	isRecent,
+	mergeRatings,
+	ratingCards,
+	type ChessRatings
+} from './chess';
 import stored from './data/chess.json';
 
 describe('isRecent', () => {
@@ -53,5 +61,56 @@ describe('ratingCards', () => {
 			fetchedAt: '2026-11-04T00:00:00Z'
 		};
 		expect(ratingCards(data).map((c) => c.label)).toEqual(['Chess.com daily']);
+	});
+});
+
+describe('isChessApiResponse', () => {
+	const valid = {
+		chesscom: { bullet: { rating: 2100, lastGame: '2026-11-11' } },
+		fide: { classical: 2140 },
+		fetchedAt: '2026-11-12T10:00:00.000Z'
+	};
+
+	it('accepts a full answer and answers with missing sources', () => {
+		expect(isChessApiResponse(valid)).toBe(true);
+		expect(isChessApiResponse({ chesscom: null, fide: null, fetchedAt: null })).toBe(true);
+	});
+
+	it('rejects broken answers', () => {
+		expect(isChessApiResponse(null)).toBe(false);
+		expect(isChessApiResponse('<html>')).toBe(false);
+		expect(isChessApiResponse({ ...valid, fide: { classical: '2140' } })).toBe(false);
+		expect(
+			isChessApiResponse({ ...valid, chesscom: { puzzle: { rating: 1, lastGame: '2026-01-01' } } })
+		).toBe(false);
+		expect(isChessApiResponse({ ...valid, fetchedAt: null })).toBe(false);
+	});
+});
+
+describe('mergeRatings', () => {
+	const base = stored as ChessRatings;
+
+	it('replaces both sources and the date with live values', () => {
+		const merged = mergeRatings(base, {
+			chesscom: { blitz: { rating: 2260, lastGame: '2026-11-10' } },
+			fide: { classical: 2140 },
+			fetchedAt: '2026-11-12T10:00:00.000Z'
+		});
+		expect(merged).toEqual({
+			chesscom: { blitz: { rating: 2260, lastGame: '2026-11-10' } },
+			fide: { classical: 2140 },
+			fetchedAt: '2026-11-12T10:00:00.000Z'
+		});
+	});
+
+	it('keeps stored values for a missing source', () => {
+		const merged = mergeRatings(base, {
+			chesscom: null,
+			fide: { classical: 2140 },
+			fetchedAt: null
+		});
+		expect(merged.chesscom).toBe(base.chesscom);
+		expect(merged.fetchedAt).toBe(base.fetchedAt);
+		expect(merged.fide).toEqual({ classical: 2140 });
 	});
 });
