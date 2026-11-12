@@ -2,6 +2,7 @@
 node_modules/
 
 # Build output
+api/dist/
 /build/
 /.svelte-kit/
 /package/

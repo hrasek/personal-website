@@ -1,0 +1,21 @@
+{
+	"name": "personal-website-api",
+	"version": "0.0.1",
+	"private": true,
+	"description": "Managed Azure Functions for the personal website: /api/chess",
+	"main": "dist/src/functions/*.js",
+	"scripts": {
+		"build": "tsc",
+		"clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\""
+	},
+	"engines": {
+		"node": ">=22"
+	},
+	"dependencies": {
+		"@azure/functions": "^4.17.1"
+	},
+	"devDependencies": {
+		"@types/node": "^22.20.5",
+		"typescript": "^6.0.3"
+	}
+}
