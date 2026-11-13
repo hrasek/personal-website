@@ -1,0 +1,12 @@
+{
+	"url": null,
+	"title": "Martin Hošek – Software Engineer",
+	"description": "Software engineer with a PhD in physics. I build web scrapers, RAG chatbots and backend systems in Python. Projects, experience, publications and chess.",
+	"locale": "en_GB",
+	"image": {
+		"path": "/og-image.png",
+		"width": 1200,
+		"height": 630,
+		"alt": "Martin Hošek, software engineer with a PhD in physics"
+	}
+}

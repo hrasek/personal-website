@@ -5,9 +5,12 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="text-scale" content="scale" />
 		<meta name="color-scheme" content="light dark" />
-		<!-- TODO(content): final title and description in the SEO PR -->
-		<title>Martin Hošek</title>
-		<meta name="description" content="Software engineer with a PhD in physics." />
+		<meta name="theme-color" content="#fafaf7" media="(prefers-color-scheme: light)" />
+		<meta name="theme-color" content="#101214" media="(prefers-color-scheme: dark)" />
+		<link rel="icon" href="%sveltekit.assets%/favicon.ico" sizes="32x32" />
+		<link rel="icon" href="%sveltekit.assets%/favicon.svg" type="image/svg+xml" />
+		<link rel="apple-touch-icon" href="%sveltekit.assets%/apple-touch-icon.png" />
+		<!-- Title, description and social tags: src/lib/components/SeoHead.svelte -->
 		<script>
 			// Set the theme before the first paint to avoid a flash of the wrong colours.
 			// Same logic as resolveTheme() in src/lib/theme.ts; keep both in sync.
