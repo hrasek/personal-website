@@ -20,13 +20,11 @@
 	}
 </script>
 
-<button
-	type="button"
-	class="theme-toggle"
-	onclick={toggle}
-	aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
->
-	{theme === 'dark' ? 'Dark' : 'Light'}
+<!-- The accessible name starts with the visible text (WCAG 2.5.3, label in name). -->
+<button type="button" class="theme-toggle" onclick={toggle}>
+	{theme === 'dark' ? 'Dark' : 'Light'}<span class="visually-hidden"
+		>{theme === 'dark' ? ' theme, switch to light mode' : ' theme, switch to dark mode'}</span
+	>
 </button>
 
 <style>
