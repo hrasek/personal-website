@@ -10,7 +10,9 @@ export default defineConfig({
 				runes: ({ filename }) =>
 					filename.split(/[/\\]/).includes('node_modules') ? undefined : true
 			},
-			adapter: adapter()
+			adapter: adapter(),
+			// Inline the small CSS files into the HTML, so they don't block the first paint.
+			inlineStyleThreshold: 32 * 1024
 		})
 	],
 	test: {
