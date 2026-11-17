@@ -2,7 +2,7 @@
 	"name": "personal-website-api",
 	"version": "0.0.1",
 	"private": true,
-	"description": "Managed Azure Functions for the personal website: /api/chess",
+	"description": "Managed Azure Functions for the personal website: /api/chess, /api/contact",
 	"main": "dist/src/functions/*.js",
 	"scripts": {
 		"build": "tsc",

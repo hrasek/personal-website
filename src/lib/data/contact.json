@@ -2,5 +2,21 @@
 	"title": "Let's talk.",
 	"text": "I am open to software engineering roles in backend, scraping, data and AI-powered applications.",
 	"languages": "Czech (native) · English (B2)",
-	"email": null
+	"form": {
+		"nameLabel": "Name",
+		"emailLabel": "Email",
+		"messageLabel": "Message",
+		"submit": "Send message",
+		"sending": "Sending…",
+		"sent": "Thank you, your message has been sent. I will reply to the email address you gave.",
+		"failed": "Sorry, the message could not be sent. Please try again later, or write to me on",
+		"noScript": "The contact form needs JavaScript. You can also write to me on",
+		"errors": {
+			"name": "Please enter your name.",
+			"email": "Please enter a valid email address.",
+			"message": "Please write a message of up to 3,000 characters."
+		},
+		"privacy": "Your name, email and message are sent to my phone through Pushbullet. This site does not store them."
+	},
+	"directLinks": "You can also find me on"
 }

@@ -11,7 +11,8 @@ for a software engineer with a PhD in physics.
 
 - [SvelteKit](https://svelte.dev/docs/kit) with the static adapter, TypeScript
 - Plain CSS with CSS variables (light and dark mode)
-- One managed Azure Function, `/api/chess`, for live chess ratings
+- Two managed Azure Functions: `/api/chess` for live chess ratings and
+  `/api/contact`, which sends contact form messages to my phone via Pushbullet
 - Hosting on Azure Static Web Apps (Free plan), deployed by Azure Pipelines
 - GitHub Actions run the checks on every pull request
 
@@ -31,6 +32,22 @@ npm run preview      # serve the production build locally
 npm run build:api    # install and build the Azure Functions API in api/
 npm run chess:check  # call the real Chess.com and FIDE APIs and print the result
 ```
+
+### Contact API locally
+
+The contact function needs a Pushbullet access token. Locally it lives in
+`api/local.settings.json`, which is gitignored; never commit it.
+
+```bash
+cp api/local.settings.example.json api/local.settings.json   # then paste your token
+npm run build --prefix api
+cd api && func start          # needs Azure Functions Core Tools v4
+curl -i http://localhost:7071/api/contact -H "Content-Type: application/json" \
+  -d '{"name":"Test","email":"test@example.com","message":"Hello","website":""}'
+```
+
+A `200` answer means the note was sent to Pushbullet; `400` means invalid
+input; `502` means Pushbullet failed or the token is missing.
 
 ## Project structure
 

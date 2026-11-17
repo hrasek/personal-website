@@ -15,6 +15,7 @@
 	--color-accent: #2f6f55;
 	--color-on-accent: #ffffff;
 	--color-border: #e4e4de;
+	--color-danger: #b42318; /* form errors: over 6:1 on background and surface */
 
 	--font-sans: 'Inter Variable', system-ui, sans-serif;
 	--font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
@@ -61,6 +62,7 @@
 	--color-accent: #5fb894;
 	--color-on-accent: #101214;
 	--color-border: #2a2e34;
+	--color-danger: #f97066; /* form errors: over 6:1 on background and surface */
 }
 
 /* Without JavaScript, follow the system setting. */
@@ -75,6 +77,7 @@
 		--color-accent: #5fb894;
 		--color-on-accent: #101214;
 		--color-border: #2a2e34;
+		--color-danger: #f97066;
 	}
 }
 
