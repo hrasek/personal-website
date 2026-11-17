@@ -1,6 +1,6 @@
 # Personal Website – Design & Technical Specification
 
-Martin Hošek · Version 0.5 · November 2026
+Martin Hošek · Version 0.6 · November 2026
 
 > This file is the repository copy of the specification. Keep it in sync with
 > the project copy on claude.ai. Decisions and their reasons are logged in
@@ -33,7 +33,7 @@ The website is the extended version of my one-page CV. The CV stays short; the w
 
 The site is a single scrolling page with anchor navigation. Sections in order:
 
-1. **Hero**: name, one-line identity, buttons (GitHub, LinkedIn, Email, Download CV).
+1. **Hero**: name, one-line identity, buttons (See projects, Download CV) and GitHub and LinkedIn links. No email address anywhere on the site (D17).
    - Draft line: _Software engineer with a PhD in physics. I build scrapers, RAG chatbots and backend systems in Python._
 2. **About**: 2 to 3 short paragraphs on the path from spectroscopy to software and what I am looking for.
 3. **Projects**: 3 to 5 cards. Each card has a title, 2-sentence description, tech tags, and a GitHub or demo link.
@@ -48,7 +48,7 @@ The site is a single scrolling page with anchor navigation. Sections in order:
 7. **Beyond code**: chess is the main hobby, with floorball and football mentioned in one line.
    - Chess: 2 to 3 sentences on why I play and what it trains (logical and strategic thinking), a link to my Lichess or Chess.com profile with current rating, and an interactive board replaying one favourite game.
    - Other interests: one short line, no separate cards.
-8. **Contact**: a short contact form (name, email, message) that sends me a phone notification, plus email, LinkedIn and GitHub links; languages spoken (Czech native, English B2). No location (decided 10 November 2026). The email link stays visible as the fallback if the form fails (see D16).
+8. **Contact**: intro text with languages spoken (Czech native, English B2), GitHub and LinkedIn links, and a short contact form (name, email, message) that sends me a phone notification. No email address and no location (decided 10 and 17 November 2026). If the form fails, it points to LinkedIn (see D16 and D17).
 9. **Footer**: copyright, link back to top.
 
 ## 4. Design
@@ -65,6 +65,7 @@ The site is a single scrolling page with anchor navigation. Sections in order:
 | Muted text           | #5B616B    | #9AA1AB   |
 | Accent (chess green) | #2F6F55    | #5FB894   |
 | Border               | #E4E4DE    | #2A2E34   |
+| Error (form)         | #B42318    | #F97066   |
 
 **Typography**
 
@@ -79,7 +80,7 @@ The site is a single scrolling page with anchor navigation. Sections in order:
 - Project cards in a 2-column grid on desktop, 1 column on mobile.
 - Timeline as a vertical list with dates on the left.
 - Chess block: text and profile link on the left, board on the right (stacked on mobile), with Previous and Next move buttons under the board.
-- Contact form: labelled fields, one primary Send button, a status message (sending, sent, error) announced to screen readers, and a one-line privacy note under the form.
+- Contact section in one column at every width: intro text, GitHub and LinkedIn links, then the form (max 560 px). The form has labelled fields, a character counter for the message, error messages under the fields, one primary Send button, a status message (sending, sent, error) announced to screen readers, and a one-line privacy note under the form.
 - Light/dark toggle in the top bar, defaulting to the system setting.
 
 **Responsive breakpoints:** 640 px (mobile to tablet), 960 px (tablet to desktop). Mobile first.
@@ -126,7 +127,7 @@ The site is a single scrolling page with anchor navigation. Sections in order:
 
 The values above come from the real responses for my accounts. The function reads `chess_blitz`, `chess_bullet`, `chess_rapid` and `chess_daily` from the Chess.com stats response, takes `last.rating` and converts `last.date` (a Unix timestamp in seconds) to a date. **Display rule:** the page shows only formats with a game in the 12 months before `fetchedAt` (not before "now", so the prerendered page and the browser agree). Today that means blitz, bullet and daily; rapid is hidden because the last rapid game was in March 2023. Chess960, tactics and puzzle rush are ignored.
 
-**Contact form:** the form sends `POST /api/contact` with a JSON body `{ "name", "email", "message", "website" }` (`website` is the hidden honeypot). The function, a second managed Azure Function in `api/`, checks that name and message are present, the email looks like an address, and the message has at most 3,000 characters. If the honeypot is filled, it answers 200 without sending anything. Otherwise it sends a Pushbullet note:
+**Contact form:** the form sends `POST /api/contact` with a JSON body `{ "name", "email", "message", "website" }` (`website` is the hidden honeypot). The function, a second managed Azure Function in `api/`, checks the input: name 1 to 100 characters, email up to 254 characters and shaped like an address, message 1 to 3,000 characters; request bodies over 16 KB are rejected before parsing. The browser checks the same limits first (`src/lib/contact-form.ts`; a unit test keeps both sets equal). If the honeypot is filled, the function answers 200 without sending anything. Otherwise it sends a Pushbullet note:
 
 ```
 POST https://api.pushbullet.com/v2/pushes
@@ -136,15 +137,16 @@ Content-Type: application/json
 { "type": "note", "title": "Website: <name>", "body": "<email>\n\n<message>" }
 ```
 
-The function answers 200 (sent), 400 (invalid input) or 502 (Pushbullet failed), and never returns the token or internal error details. The page shows "Sent" or an error with the email link. With no device given, Pushbullet delivers the note to all devices on my account. A free account can send 500 pushes per month; beyond that pushes fail and the email link is the fallback (see D16).
+The function answers 200 (sent), 400 with the invalid fields (`{ "error": "invalid_input", "fields": ["email"] }`), or 502 when Pushbullet fails or `PUSHBULLET_TOKEN` is missing, always with `Cache-Control: no-store`. It never returns the token or internal error details, and its logs never contain the token or the message. The page shows a success message, marks the invalid fields, or shows an error that points to LinkedIn. With no device given, Pushbullet delivers the note to all devices on my account. A free account can send 500 pushes per month; beyond that pushes fail and the error message points to LinkedIn (see D16 and D17).
 
 ## 6. URL, domain and hosting
 
 - **Preferred domain:** martinhosek.cz (to be checked for availability). Alternatives: martinhosek.dev, hosek.dev.
+- **Registrar (planned):** WEDOS. A .cz domain costs 160 Kč per year without VAT (193.60 Kč with VAT) for both registration and renewal, per WEDOS help, checked on 12 November 2026. Before buying, check that WEDOS DNS can point the bare domain at the Static Web App (an ALIAS or ANAME record or similar); otherwise `www` becomes the main address and the bare domain redirects to it.
 - **Hosting:** Azure Static Web Apps, Free plan (free SSL, up to 2 custom domains). It also runs the chess and contact functions as managed Azure Functions.
 - **Deployment:** a merge to `main` triggers the Azure pipeline, which builds the site and deploys it.
-- **Email:** a simple address on the domain (for example martin@martinhosek.cz) forwarded to my main mailbox. How to forward it depends on the registrar (open decision).
-- **Estimated cost:** domain about 10 to 20 EUR per year; hosting free.
+- **Email:** none on the site (D17), so no email address or forwarding is needed for the domain.
+- **Estimated cost:** domain about 194 Kč per year with VAT; hosting free.
 
 ## 7. Repository structure
 
@@ -180,27 +182,27 @@ personal-website/
 
 GitHub Actions check every pull request. After a merge to `main`, Azure Pipelines builds the site and deploys it to Azure Static Web Apps. The only running cost is the domain name.
 
-| Part                                         | Cost                        | Note                                                                                                                                   |
-| -------------------------------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| Hosting (Azure Static Web Apps, Free)        | Free                        | 100 GB bandwidth per month per subscription, no paid overage; 250 MB per environment; 3 preview environments; 2 custom domains; no SLA |
-| API functions (`/api/chess`, `/api/contact`) | Free (to verify)            | Managed Azure Functions inside the Static Web App on Node.js 22; whether they add any cost on the Free plan is still to be verified    |
-| Pushbullet (free account)                    | Free                        | 500 pushes per month; pushes beyond the limit fail, and the page falls back to the email link                                          |
-| Azure Pipelines (private project)            | Free                        | 1 Microsoft-hosted parallel job, 1,800 minutes per month, 60 minutes per run; confirmed active in my organization                      |
-| GitHub Actions                               | Free                        | Free for standard runners in public repositories, so the repository stays public                                                       |
-| Domain                                       | about 10 to 25 EUR per year | My estimate; check the price at the registrar before buying                                                                            |
+| Part                                         | Cost                  | Note                                                                                                                                   |
+| -------------------------------------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Hosting (Azure Static Web Apps, Free)        | Free                  | 100 GB bandwidth per month per subscription, no paid overage; 250 MB per environment; 3 preview environments; 2 custom domains; no SLA |
+| API functions (`/api/chess`, `/api/contact`) | Free (to verify)      | Managed Azure Functions inside the Static Web App on Node.js 22; whether they add any cost on the Free plan is still to be verified    |
+| Pushbullet (free account)                    | Free                  | 500 pushes per month; pushes beyond the limit fail, and the error message points to LinkedIn                                           |
+| Azure Pipelines (private project)            | Free                  | 1 Microsoft-hosted parallel job, 1,800 minutes per month, 60 minutes per run; confirmed active in my organization                      |
+| GitHub Actions                               | Free                  | Free for standard runners in public repositories, so the repository stays public                                                       |
+| Domain                                       | about 194 Kč per year | .cz at WEDOS: 160 Kč without VAT, checked 12 November 2026                                                                             |
 
-Figures come from the official Microsoft pages [Static Web Apps quotas](https://learn.microsoft.com/azure/static-web-apps/quotas), [Static Web Apps plans](https://learn.microsoft.com/azure/static-web-apps/plans), [Static Web Apps languages and runtimes](https://learn.microsoft.com/azure/static-web-apps/languages-runtimes) and [Azure Pipelines parallel jobs](https://learn.microsoft.com/azure/devops/pipelines/licensing/concurrent-jobs), read on 6 November 2026, from the [GitHub Actions billing](https://docs.github.com/en/actions/reference/usage-limits-billing-and-administration) page, read on 4 November 2026, and from the [Pushbullet API docs](https://docs.pushbullet.com/), read on 12 November 2026. Check them again before launch.
+Figures come from the official Microsoft pages [Static Web Apps quotas](https://learn.microsoft.com/azure/static-web-apps/quotas), [Static Web Apps plans](https://learn.microsoft.com/azure/static-web-apps/plans), [Static Web Apps languages and runtimes](https://learn.microsoft.com/azure/static-web-apps/languages-runtimes) and [Azure Pipelines parallel jobs](https://learn.microsoft.com/azure/devops/pipelines/licensing/concurrent-jobs), read on 6 November 2026, from the [GitHub Actions billing](https://docs.github.com/en/actions/reference/usage-limits-billing-and-administration) page, read on 4 November 2026, from the [Pushbullet API docs](https://docs.pushbullet.com/), read on 12 November 2026, and from the [Static Web Apps build configuration](https://learn.microsoft.com/azure/static-web-apps/build-configuration) and [AzureStaticWebApp@0 task](https://learn.microsoft.com/azure/devops/pipelines/tasks/reference/azure-static-web-app-v0) pages, read on 17 November 2026. Check them again before launch.
 
 **Deployment steps**
 
 1. Public GitHub repository (done). It holds no secrets.
 2. Azure DevOps organization with a private project (done). New organizations can no longer create public projects.
-3. In the Azure portal, create a Static Web App on the Free plan. Choose a deployment source other than GitHub, so Azure doesn't add its own GitHub Actions workflow (to be confirmed when we create it).
+3. In the Azure portal, create a Static Web App on the Free plan, region West Europe. Choose a deployment source other than GitHub, so Azure doesn't add its own GitHub Actions workflow (to be confirmed when we create it).
 4. Copy the Static Web App's deployment token and store it as a secret variable in the Azure pipeline, never in the repository.
-5. Add `azure-pipelines.yml`: on a push to `main`, install Node from `.nvmrc`, run `npm ci` and `npm run build`, then deploy `build/` and `api/` with the `AzureStaticWebApp@0` task (`skip_app_build: true`). To verify: Microsoft's FAQ says `skip_app_build` only covers the frontend and the API must be built by the Static Web Apps task (see D16).
-6. Create the pipeline in Azure DevOps from the GitHub repository and run the first deploy. The site appears at its `*.azurestaticapps.net` address with HTTPS; test it there, including `/api/chess`.
-7. Add the application setting `PUSHBULLET_TOKEN` in the Static Web App, then test `/api/contact` on the `*.azurestaticapps.net` address before the form goes live.
-8. Buy the domain and add it as a custom domain in the Static Web App. HTTPS certificates are free.
+5. Add `azure-pipelines.yml`: on a push to `main`, install Node from `.nvmrc`; build the site (`npm ci`, `npm run build`); build the API (`npm ci --prefix api`, `npm run build --prefix api`, then `npm prune --omit=dev --prefix api`, so only runtime packages are uploaded); deploy with the `AzureStaticWebApp@0` task: `app_location: build`, `output_location: ''`, `api_location: api`, `skip_app_build: true`, `skip_api_build: true`, and the token from the secret variable `deployment_token` (see D13).
+6. Add the application setting `PUSHBULLET_TOKEN` in the Static Web App before the first deploy, so the contact form works from the start.
+7. Create the pipeline in Azure DevOps from the GitHub repository and run the first deploy. The site appears at its `*.azurestaticapps.net` address with HTTPS; test it there, including `/api/chess` and a real message through the contact form.
+8. Buy the domain and add it as a custom domain in the Static Web App (the bare domain and `www`, the Free plan's 2 custom domains). HTTPS certificates are free. Then set `url` in `src/lib/data/site.json` (D15).
 9. Optional later: preview deployments for pull requests (the Free plan allows 3 preview environments).
 
 **Branch protection (active since 5 November 2026)**
@@ -224,12 +226,12 @@ The steps are: install dependencies (`npm ci`), lint, type check, run the unit t
 - [x] Current CV as PDF (one page), added 12 November 2026
 - [ ] Professional photo (optional)
 - [x] Social preview image (text only), added 12 November 2026
-- [ ] Final email address and LinkedIn URL
+- [ ] Final LinkedIn URL
 - [ ] Permission check for any client work shown
 - [x] Chess: Chess.com username (`hrasek`) and FIDE ID (`345652`), decided 12 November 2026
 - [ ] Chess: a 2 to 3 sentence personal text, and one favourite game as PGN (if the board is shown)
 - [x] Pushbullet account and access token; test note received on Android, 17 November 2026
-- [ ] Contact form copy: intro line, success and error messages, privacy note (English)
+- [ ] Contact form copy: labels, success and error messages, privacy note (English); a draft is in `contact.json`
 
 ## 11. Milestones
 
@@ -246,4 +248,4 @@ The steps are: install dependencies (`npm ci`), lint, type check, run the unit t
 - Whether to add a blog after launch
 - Which projects to show publicly
 - Whether to show an interactive board with a favourite game, or only profile link and rating
-- How to forward email for the domain (depends on the registrar)
+- Whether WEDOS DNS supports pointing the bare domain at the Static Web App, or `www` becomes the main address
