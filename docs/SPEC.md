@@ -180,14 +180,14 @@ personal-website/
 
 GitHub Actions check every pull request. After a merge to `main`, Azure Pipelines builds the site and deploys it to Azure Static Web Apps. The only running cost is the domain name.
 
-| Part                                    | Cost                        | Note                                                                                                                                   |
-| --------------------------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| Hosting (Azure Static Web Apps, Free)   | Free                        | 100 GB bandwidth per month per subscription, no paid overage; 250 MB per environment; 3 preview environments; 2 custom domains; no SLA |
-| API functions (`/api/chess`, `/api/contact`) | Free (to verify)       | Managed Azure Functions inside the Static Web App on Node.js 22; whether they add any cost on the Free plan is still to be verified     |
-| Pushbullet (free account)               | Free                        | 500 pushes per month; pushes beyond the limit fail, and the page falls back to the email link                                          |
-| Azure Pipelines (private project)       | Free                        | 1 Microsoft-hosted parallel job, 1,800 minutes per month, 60 minutes per run; confirmed active in my organization                      |
-| GitHub Actions                          | Free                        | Free for standard runners in public repositories, so the repository stays public                                                       |
-| Domain                                  | about 10 to 25 EUR per year | My estimate; check the price at the registrar before buying                                                                            |
+| Part                                         | Cost                        | Note                                                                                                                                   |
+| -------------------------------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Hosting (Azure Static Web Apps, Free)        | Free                        | 100 GB bandwidth per month per subscription, no paid overage; 250 MB per environment; 3 preview environments; 2 custom domains; no SLA |
+| API functions (`/api/chess`, `/api/contact`) | Free (to verify)            | Managed Azure Functions inside the Static Web App on Node.js 22; whether they add any cost on the Free plan is still to be verified    |
+| Pushbullet (free account)                    | Free                        | 500 pushes per month; pushes beyond the limit fail, and the page falls back to the email link                                          |
+| Azure Pipelines (private project)            | Free                        | 1 Microsoft-hosted parallel job, 1,800 minutes per month, 60 minutes per run; confirmed active in my organization                      |
+| GitHub Actions                               | Free                        | Free for standard runners in public repositories, so the repository stays public                                                       |
+| Domain                                       | about 10 to 25 EUR per year | My estimate; check the price at the registrar before buying                                                                            |
 
 Figures come from the official Microsoft pages [Static Web Apps quotas](https://learn.microsoft.com/azure/static-web-apps/quotas), [Static Web Apps plans](https://learn.microsoft.com/azure/static-web-apps/plans), [Static Web Apps languages and runtimes](https://learn.microsoft.com/azure/static-web-apps/languages-runtimes) and [Azure Pipelines parallel jobs](https://learn.microsoft.com/azure/devops/pipelines/licensing/concurrent-jobs), read on 6 November 2026, from the [GitHub Actions billing](https://docs.github.com/en/actions/reference/usage-limits-billing-and-administration) page, read on 4 November 2026, and from the [Pushbullet API docs](https://docs.pushbullet.com/), read on 12 November 2026. Check them again before launch.
 
