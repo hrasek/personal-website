@@ -74,6 +74,13 @@ Before proposing a commit, run `check`, `lint`, `test`, `build` and `build:api`.
   file. Never commit a CV version that contains an email, phone number or
   address: every committed version stays in the public history.
 
+## SEO
+
+- Title, description and social preview settings: `src/lib/data/site.json`.
+  `url` stays `null` until the domain is decided; never put a placeholder
+  domain there. `sitemap.xml` and `robots.txt` are generated routes, not
+  files in `static/`.
+
 ## Quality targets
 
 - Lighthouse 95+ in all four categories. First-load weight under 500 KB

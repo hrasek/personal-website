@@ -1,6 +1,6 @@
 # Personal Website – Design & Technical Specification
 
-Martin Hošek · Version 0.3 · November 2026
+Martin Hošek · Version 0.4 · November 2026
 
 > This file is the repository copy of the specification. Keep it in sync with
 > the project copy on claude.ai. Decisions and their reasons are logged in
@@ -157,7 +157,7 @@ personal-website/
 ## 8. Quality requirements
 
 - **Performance:** Lighthouse score 95+ in all four categories; page weight under 500 KB without images (the chess board script loads lazily and is excluded from first load).
-- **SEO:** title, meta description, Open Graph image, sitemap, `lang` attribute.
+- **SEO:** title, meta description, Open Graph image, sitemap, `lang` attribute. Settings in `src/lib/data/site.json`; tags that need an absolute URL are added once `url` is set there (see D15).
 - **Privacy:** no cookies, no tracking beyond privacy-friendly analytics.
 - **Browser support:** current versions of Chrome, Firefox, Safari, Edge.
 

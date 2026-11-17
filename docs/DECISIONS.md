@@ -173,8 +173,8 @@ Entries D1 to D5 were made before this log existed and are recorded here on
 - **Decision:**
   - `api/` is a separate npm package: TypeScript, Azure Functions Node.js
     programming model v4, compiled with `tsc`. It runs on Node.js 22 in
-    Static Web Apps (`static/staticwebapp.config.json`, `apiRuntime:
-node:22`); the site and CI stay on Node 24.
+    Static Web Apps (`apiRuntime` is `node:22` in
+    `static/staticwebapp.config.json`); the site and CI stay on Node 24.
   - Chess.com username `hrasek` and FIDE ID `345652` are in
     `api/src/lib/config.ts`; application settings `CHESSCOM_USERNAME` and
     `FIDE_ID` override them. They are public data, not secrets.
@@ -201,8 +201,34 @@ node:22`); the site and CI stay on Node 24.
 - **To verify after the first deploy:** that `/api/chess` answers on the
   live site and that the function logs show no errors.
 
+## D15: SEO, icons and social preview (12 November 2026)
+
+- **Decision:**
+  - Title, description and the social preview settings live in
+    `src/lib/data/site.json`, rendered by `SeoHead.svelte`.
+  - `site.json` has `"url": null` until the domain is decided. While it is
+    `null`, the build leaves out everything that needs an absolute URL: the
+    canonical link, `og:url`, `og:image`, the sitemap entries and the
+    `Sitemap:` line in `robots.txt`. `sitemap.xml` and `robots.txt` are
+    prerendered routes, so setting the URL once updates all of them.
+  - Icons: a bold `MH` monogram, white on the text colour (#14161A), drawn
+    on a 16x16 pixel grid so it stays sharp at small sizes (`favicon.svg`,
+    `favicon.ico`, `apple-touch-icon.png`). Social preview: a text-only
+    1200x630 `og-image.png` (no photo; that decision is still open).
+  - Small CSS files are inlined into the HTML (`inlineStyleThreshold`), so
+    they don't block the first paint.
+- **Why:** a placeholder domain in the canonical link or sitemap would be
+  indexed and is worse than no tag at all.
+- **Measured on 12 November 2026** (local production build, Lighthouse 12,
+  mobile): Performance 95 to 98, Accessibility 100, Best Practices 96, SEO
+  100; desktop Performance 100. Page weight 251 KiB. axe-core found no
+  violations in light or dark mode at 375 and 1280 px. Best Practices loses
+  points only because `/api/chess` doesn't exist in `vite preview`.
+- **To do when the domain is known:** set `url` in `site.json`, then check
+  the preview with a social card validator.
+
 ## Open
 
 See [SPEC.md](SPEC.md), section 12: domain, licence, photo, blog, which
-projects to show, chess accounts, interactive board, email forwarding.
+projects to show, interactive board, email forwarding.
 Also the open points listed in D13.
