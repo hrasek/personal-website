@@ -47,7 +47,10 @@ Before proposing a commit, run `check`, `lint`, `test`, `build` and `build:api`.
 
 - One page with these sections: Hero, About, Projects, Experience,
   Publication, Skills, Beyond code (chess), Contact, Footer.
-- Not at launch: blog, football section, contact form.
+- Not at launch: blog, football section.
+- Contact has a form that posts to `/api/contact`, a second managed
+  function in `api/`, which sends me a Pushbullet note. The email link stays
+  as the fallback. Details in D16 and the spec's "Contact form" part.
 
 ## Chess ratings (`api/`)
 
@@ -95,6 +98,9 @@ Before proposing a commit, run `check`, `lint`, `test`, `build` and `build:api`.
   commits or requests. Neither chess API needs a key. If one ever does, it
   goes into the Static Web App's application settings, never into the
   repository.
+- The contact form's Pushbullet token is the `PUSHBULLET_TOKEN` application
+  setting (see D16). Never put it in code, docs or commits; locally it lives
+  in the gitignored `api/local.settings.json`.
 
 ## Git workflow (project-specific)
 
