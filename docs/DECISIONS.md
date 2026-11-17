@@ -163,8 +163,14 @@ Entries D1 to D5 were made before this log existed and are recorded here on
     question is settled in D14)
   - whether deploy results can be shown on GitHub (commit status or README
     badge) for a private Azure DevOps project
-  - email forwarding for the domain, which was planned with Cloudflare
-    Email Routing and now depends on the registrar
+  - email forwarding for the domain: no longer needed, because the site
+    shows no email address (D17)
+- **API build, answered on 17 November 2026:** the `AzureStaticWebApp@0`
+  task has separate `skip_app_build` and `skip_api_build` inputs. Microsoft's
+  build configuration docs describe building the API yourself, setting
+  `skip_api_build: true` and pointing `api_location` at the built API. The
+  pipeline therefore builds both the site and the API and the task only
+  uploads them (SPEC.md, section 9, step 5).
 - **Rejected:** Kubernetes with Argo CD. A cluster costs money every month
   and needs maintenance, which is too much for a static page. Better shown
   in a separate project that needs it, featured on the site.
@@ -232,6 +238,10 @@ Entries D1 to D5 were made before this log existed and are recorded here on
 
 ## D16: Contact form with Pushbullet notifications (17 November 2026)
 
+> The email-link fallback is superseded by D17 (17 November 2026): the site
+> shows no email address, and a failed send points to LinkedIn. The
+> pipeline question under "To verify" is answered in D13.
+
 - **Decision:**
   - The Contact section gets a short form: name, email, message (1 to
     3,000 characters) and a hidden honeypot field `website`. The email
@@ -281,8 +291,44 @@ Entries D1 to D5 were made before this log existed and are recorded here on
     limiting or a captcha as a new decision.
 - **Supersedes:** the contact-form part of D3.
 
+## D17: Contact form without an email address (17 November 2026)
+
+- **Decision:**
+  - My email address appears nowhere on the site or in the repository. The
+    Contact section has the form plus GitHub and LinkedIn links.
+  - If sending fails, the form says so and points to LinkedIn. Without
+    JavaScript, a short note points to LinkedIn instead of the form.
+  - The Contact section is one column at every width: intro text, the
+    GitHub and LinkedIn links, then the form (max 560 px wide).
+  - Limits, the same in the browser (`src/lib/contact-form.ts`) and in the
+    API (`api/src/lib/contact.ts`), kept equal by a unit test: name 1 to 100
+    characters, email up to 254 characters and shaped like an address,
+    message 1 to 3,000 characters. The API also rejects request bodies over
+    16 KB before parsing them.
+  - A 400 answer lists the invalid fields
+    (`{ "error": "invalid_input", "fields": ["email"] }`) and the form marks
+    them. A missing `PUSHBULLET_TOKEN` gives 502 and the log line
+    "PUSHBULLET_TOKEN is not set". The function answers with
+    `Cache-Control: no-store`, and its logs never contain the token or the
+    visitor's message.
+  - Form errors use a new colour token, `--color-danger`: #B42318 in light
+    mode and #F97066 in dark mode, both above 6:1 contrast on the background
+    and on surfaces.
+  - The form copy in `src/lib/data/contact.json` is a draft
+    (`TODO(content)`).
+- **Why:** an address on a public page and in a public repository attracts
+  spam (and D5 keeps it out of the repository anyway). Recruiters already
+  use LinkedIn. Without an email address, no email forwarding is needed for
+  the domain. One column looked calmer than form and text side by side.
+- **Trade-off:** visitors who would rather copy an email address can't.
+- **Checked on 17 November 2026:** lint, type check, 66 unit tests and both
+  builds pass; axe-core found no violations in the Contact section in light
+  and dark mode at 375 and 1280 px, with the error messages showing.
+- **Supersedes:** the email-link fallback in D16; the email forwarding
+  question in D13 and in SPEC.md, section 12.
+
 ## Open
 
 See [SPEC.md](SPEC.md), section 12: domain, licence, photo, blog, which
-projects to show, interactive board, email forwarding.
+projects to show, interactive board, DNS for the bare domain.
 Also the open points listed in D13 and D16.

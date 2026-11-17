@@ -49,8 +49,9 @@ Before proposing a commit, run `check`, `lint`, `test`, `build` and `build:api`.
   Publication, Skills, Beyond code (chess), Contact, Footer.
 - Not at launch: blog, football section.
 - Contact has a form that posts to `/api/contact`, a second managed
-  function in `api/`, which sends me a Pushbullet note. The email link stays
-  as the fallback. Details in D16 and the spec's "Contact form" part.
+  function in `api/`, which sends me a Pushbullet note. No email address
+  anywhere on the site or in the repository; a failed send points to
+  LinkedIn. Details in D16, D17 and the spec's "Contact form" part.
 
 ## Chess ratings (`api/`)
 
