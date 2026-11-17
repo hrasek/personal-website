@@ -31,6 +31,9 @@ Entries D1 to D5 were made before this log existed and are recorded here on
 
 ## D3: Scope at launch
 
+> Contact-form part superseded by D16 (17 November 2026). No blog and no
+> football section still apply.
+
 - **Decision:** no blog, no football section and no contact form at launch.
 - **Why:** less to build and maintain. A plain email link avoids spam.
 
@@ -227,8 +230,59 @@ Entries D1 to D5 were made before this log existed and are recorded here on
 - **To do when the domain is known:** set `url` in `site.json`, then check
   the preview with a social card validator.
 
+## D16: Contact form with Pushbullet notifications (17 November 2026)
+
+- **Decision:**
+  - The Contact section gets a short form: name, email, message (1 to
+    3,000 characters) and a hidden honeypot field `website`. The email
+    link stays next to the form as a fallback.
+  - The form posts JSON to `/api/contact`, a second managed Azure Function
+    in the existing `api/` package. It validates the input, answers a
+    filled honeypot with success without sending anything, and sends a
+    Pushbullet "note" to my phone. It returns 200 (sent), 400 (invalid
+    input) or 502 (Pushbullet failed). On any error the page shows the
+    email link.
+  - The Pushbullet access token is the application setting
+    `PUSHBULLET_TOKEN` in the Static Web App. Locally it lives in
+    `api/local.settings.json`, which is gitignored; the repository has only
+    `api/local.settings.example.json` with a placeholder. The token never
+    goes into code, docs, commits or chats (see D5).
+  - The site stores nothing. A short note under the form says what is
+    collected and that messages pass through Pushbullet.
+  - No captcha and no third-party scripts at launch.
+- **Why:** visitors without a mail client can write in a few seconds; I get
+  an instant notification on my phone; the function is small backend work
+  in the existing architecture and costs nothing.
+- **Not chosen:**
+  - a personal server (WEDOS VPS, Azure VM, App Service or Container Apps):
+    extra cost and maintenance for one HTTP call, and linking your own
+    backend to Static Web Apps needs the paid Standard plan
+  - a third-party form service: messages go through another company, with
+    monthly limits on free tiers
+  - sending email (for example Azure Communication Services): needs DNS
+    setup on a domain that isn't decided yet
+  - Cloudflare Turnstile or another captcha: a third-party script that
+    works against the performance and privacy targets
+- **Facts checked on 12 and 17 November 2026:**
+  - Pushbullet API docs: free accounts can send 500 pushes per month; more
+    returns an error. Pushes are created with
+    `POST https://api.pushbullet.com/v2/pushes` and an `Access-Token`
+    header.
+  - Microsoft docs: managed functions in Static Web Apps support HTTP
+    triggers only; application settings reach the API as environment
+    variables and are encrypted at rest.
+  - Tested on 17 November 2026: a note sent with `curl` arrived on my
+    Android phone.
+- **To verify:**
+  - that the pipeline builds `api/` correctly. Microsoft's FAQ says
+    `skip_app_build` only covers the frontend and the API must be built by
+    the Static Web Apps task; this affects `/api/chess` as well.
+  - the monthly push count after launch. If spam appears, add rate
+    limiting or a captcha as a new decision.
+- **Supersedes:** the contact-form part of D3.
+
 ## Open
 
 See [SPEC.md](SPEC.md), section 12: domain, licence, photo, blog, which
 projects to show, interactive board, email forwarding.
-Also the open points listed in D13.
+Also the open points listed in D13 and D16.
