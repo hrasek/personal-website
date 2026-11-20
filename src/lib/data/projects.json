@@ -1,7 +1,7 @@
 [
 	{
 		"title": "Rating Radar",
-		"description": "A platform that lets businesses follow and evaluate customer reviews across all their branches. I built the collection of reviews from public review platforms and the microservices that let users reply to reviews directly from the app.",
+		"description": "A platform that lets businesses monitor and analyse customer reviews across all their branches. I built the scrapers that collect reviews from public review platforms and the microservices that let users reply to reviews directly from the app.",
 		"tags": ["Python", "Web scraping", "Selenium", "Laravel", "Docker"],
 		"url": "https://rating-radar.ws"
 	},

@@ -51,7 +51,7 @@ describe('ratingCards', () => {
 			rating: 2131,
 			note: 'Monthly rating list'
 		});
-		expect(cards[1].note).toBe('Last game Jul 2026');
+		expect(cards[1].note).toBe('Last game: Jul 2026');
 	});
 
 	it('skips a missing FIDE rating and missing formats', () => {
