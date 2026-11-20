@@ -90,7 +90,7 @@ export function ratingCards(data: ChessRatings): RatingCard[] {
 			cards.push({
 				label: `Chess.com ${format}`,
 				rating: entry.rating,
-				note: `Last game ${formatMonth(entry.lastGame)}`
+				note: `Last game: ${formatMonth(entry.lastGame)}`
 			});
 		}
 	}
