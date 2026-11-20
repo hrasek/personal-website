@@ -9,7 +9,12 @@ trigger:
   branches:
     include:
       - main
-
+  paths:
+    exclude:
+      - docs
+      - README.md
+      - CLAUDE.md
+      - .github
 pr: none
 
 pool:

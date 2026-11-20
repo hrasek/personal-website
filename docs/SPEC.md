@@ -1,6 +1,6 @@
 # Personal Website – Design & Technical Specification
 
-Martin Hošek · Version 0.7 · November 2026
+Martin Hošek · Version 0.8 · November 2026
 
 > This file is the repository copy of the specification. Keep it in sync with
 > the project copy on claude.ai. Decisions and their reasons are logged in
@@ -173,7 +173,7 @@ personal-website/
 
 ## 8. Quality requirements
 
-- **Performance:** Lighthouse score 95+ in all four categories; page weight under 500 KB without images (the chess board script loads lazily and is excluded from first load).
+- **Performance:** Lighthouse score 95+ in all four categories; page weight under 500 KB without images (the chess board script loads lazily and is excluded from first load). Measured on the live site on 20 November 2026 (Lighthouse 13.5, incognito): 100 in all four categories on mobile and desktop, 245 KiB (D18).
 - **SEO:** title, meta description, Open Graph image, sitemap, `lang` attribute. Settings in `src/lib/data/site.json`; tags that need an absolute URL are added once `url` is set there (see D15).
 - **Privacy:** no cookies, no tracking beyond privacy-friendly analytics. The contact form collects only name, email and message; the site stores nothing, and messages pass through Pushbullet to my phone. A one-line note under the form says this.
 - **Browser support:** current versions of Chrome, Firefox, Safari, Edge.
@@ -186,6 +186,7 @@ GitHub Actions check every pull request. After a merge to `main`, Azure Pipeline
 | -------------------------------------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | Hosting (Azure Static Web Apps, Free)        | Free                  | 100 GB bandwidth per month per subscription, no paid overage; 250 MB per environment; 3 preview environments; 2 custom domains; no SLA |
 | API functions (`/api/chess`, `/api/contact`) | Free (to verify)      | Managed Azure Functions inside the Static Web App on Node.js 22; whether they add any cost on the Free plan is still to be verified    |
+| Monitoring (built-in metrics)                | Free                  | Static Web Apps metrics under Monitoring > Metrics; no Application Insights, which is priced separately (D18)                          |
 | Pushbullet (free account)                    | Free                  | 500 pushes per month; pushes beyond the limit fail, and the error message points to LinkedIn                                           |
 | Azure Pipelines (private project)            | Free                  | 1 Microsoft-hosted parallel job, 1,800 minutes per month, 60 minutes per run; confirmed active in my organization                      |
 | GitHub Actions                               | Free                  | Free for standard runners in public repositories, so the repository stays public                                                       |
@@ -197,17 +198,17 @@ Figures come from the official Microsoft pages [Static Web Apps quotas](https://
 
 1. Public GitHub repository (done). It holds no secrets.
 2. Azure DevOps organization with a private project (done). New organizations can no longer create public projects.
-3. In the Azure portal, create a Static Web App on the Free plan, region West Europe. Choose a deployment source other than GitHub, so Azure doesn't add its own GitHub Actions workflow (to be confirmed when we create it).
-4. Copy the Static Web App's deployment token and store it as a secret variable in the Azure pipeline, never in the repository.
-5. Add `azure-pipelines.yml`: on a push to `main`, install Node from `.nvmrc`; build the site (`npm ci`, `npm run build`); build the API (`npm ci --prefix api`, `npm run build --prefix api`, then `npm prune --omit=dev --prefix api`, so only runtime packages are uploaded); deploy with the `AzureStaticWebApp@0` task: `app_location: build`, `output_location: ''`, `api_location: api`, `skip_app_build: true`, `skip_api_build: true`, and the token from the secret variable `deployment_token` (see D13).
-6. Add the application setting `PUSHBULLET_TOKEN` in the Static Web App before the first deploy, so the contact form works from the start.
-7. Create the pipeline in Azure DevOps from the GitHub repository and run the first deploy. The site appears at its `*.azurestaticapps.net` address with HTTPS; test it there, including `/api/chess` and a real message through the contact form.
+3. Done 20 November 2026. In the Azure portal, create a Static Web App on the Free plan, region West Europe. Choose a deployment source other than GitHub, so Azure doesn't add its own GitHub Actions workflow (confirmed: deployment source Other).
+4. Done 20 November 2026. Copy the Static Web App's deployment token and store it as a secret variable in the Azure pipeline, never in the repository.
+5. Done 20 November 2026 (PR #18). Add `azure-pipelines.yml`: on a push to `main`, install Node from `.nvmrc`; build the site (`npm ci`, `npm run build`); build the API (`npm ci --prefix api`, `npm run build --prefix api`, then `npm prune --omit=dev --prefix api`, so only runtime packages are uploaded); deploy with the `AzureStaticWebApp@0` task: `app_location: build`, `output_location: ''`, `api_location: api`, `skip_app_build: true`, `skip_api_build: true`, and the token from the secret variable `deployment_token` (see D13).
+6. Done 20 November 2026. Add the application setting `PUSHBULLET_TOKEN` in the Static Web App before the first deploy, so the contact form works from the start.
+7. Done 20 November 2026. Create the pipeline in Azure DevOps from the GitHub repository and run the first deploy. The site appears at its `*.azurestaticapps.net` address with HTTPS; test it there, including `/api/chess` and a real message through the contact form.
 8. Buy the domain and add it as a custom domain in the Static Web App (the bare domain and `www`, the Free plan's 2 custom domains). HTTPS certificates are free. Then set `url` in `src/lib/data/site.json` (D15).
 9. Optional later: preview deployments for pull requests (the Free plan allows 3 preview environments).
 
 **Branch protection (active since 5 November 2026)**
 
-A GitHub ruleset on `main` requires a pull request for every change (0 required approvals, because I work alone), and blocks force pushes and branch deletion. Pull requests are merged with a merge commit, so linear history is not required. Once the CI workflow has run at least once, its check is added to the ruleset as a required status check, so a pull request cannot be merged while the checks fail. Details are in [DECISIONS.md](DECISIONS.md).
+A GitHub ruleset on `main` requires a pull request for every change (0 required approvals, because I work alone), and blocks force pushes and branch deletion. Pull requests are merged with a merge commit, so linear history is not required. The CI job `checks` is a required status check in the ruleset (confirmed 20 November 2026), so a pull request cannot be merged while the checks fail. Details are in [DECISIONS.md](DECISIONS.md).
 
 **GitHub Actions (checks only)**
 
@@ -232,7 +233,7 @@ State checked against the repository on 20 November 2026.
 - [ ] Permission check for the client work shown (the four projects other than this website)
 - [x] Chess: Chess.com username (`hrasek`) and FIDE ID (`345652`), decided 12 November 2026
 - [ ] Chess: personal text has 1 sentence in `beyond-code.json` (2 to 3 planned); a favourite game as PGN only if the board is shown (see section 12)
-- [x] Pushbullet account and access token; test note received on Android, 17 November 2026
+- [x] Pushbullet account and access token; test note received on Android, 17 November 2026; contact form tested on the live site, 20 November 2026
 - [ ] Contact form copy: labels, success and error messages, privacy note (English); a draft is in `contact.json`
 
 ## 11. Milestones

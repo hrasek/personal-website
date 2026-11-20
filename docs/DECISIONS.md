@@ -64,7 +64,8 @@ Entries D1 to D5 were made before this log existed and are recorded here on
   - force pushes blocked, deletion restricted
   - "Require linear history" off (it would block merge commits, see D7)
   - empty bypass list, so the rules apply to me too
-  - required status check: added once the CI workflow has run at least once
+  - required status check: the CI job `checks` (confirmed active on
+    20 November 2026)
 - **Why:** every change is reviewed in a PR and checked by CI before it
   reaches production. 0 approvals because GitHub doesn't let me approve my
   own PR.
@@ -207,8 +208,9 @@ Entries D1 to D5 were made before this log existed and are recorded here on
   as the managed functions runtime; Azure Functions v4 supports Node 22 and
   24 in standalone Function Apps; Chess.com documents unlimited serial
   access and asks clients for an identifying User-Agent.
-- **To verify after the first deploy:** that `/api/chess` answers on the
-  live site and that the function logs show no errors.
+- **Verified after the first deploy (20 November 2026):** `/api/chess`
+  answers on the live site with live ratings, and the built-in metrics show
+  no function errors (D18).
 
 ## D15: SEO, icons and social preview (12 November 2026)
 
@@ -284,9 +286,9 @@ Entries D1 to D5 were made before this log existed and are recorded here on
   - Tested on 17 November 2026: a note sent with `curl` arrived on my
     Android phone.
 - **To verify:**
-  - that the pipeline builds `api/` correctly. Microsoft's FAQ says
-    `skip_app_build` only covers the frontend and the API must be built by
-    the Static Web Apps task; this affects `/api/chess` as well.
+  - that the pipeline builds `api/` correctly: done. The pipeline
+    builds the API itself and deploys with `skip_api_build: true` (D13);
+    both functions work on the live site since 20 November 2026 (D18).
   - the monthly push count after launch. If spam appears, add rate
     limiting or a captcha as a new decision.
 - **Supersedes:** the contact-form part of D3.
@@ -326,6 +328,40 @@ Entries D1 to D5 were made before this log existed and are recorded here on
   and dark mode at 375 and 1280 px, with the error messages showing.
 - **Supersedes:** the email-link fallback in D16; the email forwarding
   question in D13 and in SPEC.md, section 12.
+
+## D18: First deploy and monitoring (20 November 2026)
+
+- **Decision:**
+  - The Static Web App `personal-website` runs in the resource group
+    `rg-personal-website`, Free plan, region West Europe, with deployment
+    source "Other". The Azure pipeline from `azure-pipelines.yml` deploys it
+    after every merge to `main`; its first run worked on 20 November 2026.
+  - The site is live at its generated `*.azurestaticapps.net` address until
+    the custom domain is connected. The address is in the Azure portal; it
+    is left out of this public repository on purpose, so search engines
+    don't pick it up before the real domain exists.
+  - `PUSHBULLET_TOKEN` is set as an application setting in the Production
+    environment. Both functions work on the live site; a test message
+    through the contact form arrived on my phone.
+  - Monitoring uses the built-in Static Web Apps metrics (`FunctionHits`,
+    `FunctionErrors`, `SiteHits`, `SiteErrors`) under Monitoring > Metrics,
+    pinned to a private portal dashboard. **No Application Insights.**
+- **Why no Application Insights:** it is priced separately from Static Web
+  Apps. Azure Monitor's first 5 GB per month per billing account are free,
+  so it would very likely cost nothing here, but the metrics already show
+  whether the functions are called and whether they fail. Turn it on only
+  when a real problem needs the log lines (`traces`).
+- **Lighthouse on the live site (13.5, 20 November 2026, incognito):** 100
+  in Performance, Accessibility, Best Practices and SEO on mobile and on
+  desktop. Mobile: first and largest contentful paint 1.3 s, Total Blocking
+  Time 0 ms, layout shift 0.001; page weight 245 KiB. A mobile run with
+  browser extensions enabled scored 88 in Performance (extensions added
+  blocking time), so always measure in an incognito window.
+- **Checked:** the CI job `checks` was already a required status check on
+  `main` (D6).
+- **Still open:** whether the managed functions add any cost on the Free
+  plan (D13), checked in the Azure cost view after a few days of traffic;
+  the custom domain (SPEC.md, sections 6 and 9).
 
 ## Open
 
