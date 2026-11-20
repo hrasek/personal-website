@@ -1,0 +1,51 @@
+# Builds the site and the API, then deploys both to Azure Static Web Apps (D13).
+# Runs after every merge to main. Pull requests are checked by GitHub Actions
+# (.github/workflows/ci.yml), so this pipeline only deploys.
+#
+# Needs one secret pipeline variable, set in Azure DevOps and never in this file:
+#   deployment_token: the Static Web App's deployment token
+
+trigger:
+  branches:
+    include:
+      - main
+
+pr: none
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - checkout: self
+
+  # Use the Node version pinned in .nvmrc, the same as CI and local development (D12).
+  - script: echo "##vso[task.setvariable variable=NODE_MAJOR]$(cat .nvmrc)"
+    displayName: Read Node version from .nvmrc
+
+  - task: UseNode@1
+    displayName: Install Node.js $(NODE_MAJOR)
+    inputs:
+      version: $(NODE_MAJOR).x
+
+  - script: |
+      npm ci
+      npm run build
+    displayName: Build the site
+
+  # The task skips its own builds, so the API is compiled here and only the
+  # runtime packages stay in api/node_modules for the upload.
+  - script: |
+      npm ci --prefix api
+      npm run build --prefix api
+      npm prune --omit=dev --prefix api
+    displayName: Build the API
+
+  - task: AzureStaticWebApp@0
+    displayName: Deploy to Azure Static Web Apps
+    inputs:
+      app_location: build
+      output_location: ''
+      api_location: api
+      skip_app_build: true
+      skip_api_build: true
+      azure_static_web_apps_api_token: $(deployment_token)
