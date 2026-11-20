@@ -1,6 +1,6 @@
 # Personal Website – Design & Technical Specification
 
-Martin Hošek · Version 0.6 · November 2026
+Martin Hošek · Version 0.7 · November 2026
 
 > This file is the repository copy of the specification. Keep it in sync with
 > the project copy on claude.ai. Decisions and their reasons are logged in
@@ -38,7 +38,7 @@ The site is a single scrolling page with anchor navigation. Sections in order:
 2. **About**: 2 to 3 short paragraphs on the path from spectroscopy to software and what I am looking for.
 3. **Projects**: 3 to 5 cards. Each card has a title, 2-sentence description, tech tags, and a GitHub or demo link.
    - Client work can only be shown if permitted. Otherwise build small public versions (for example a RAG chatbot over public documents, a scraper with a clean data output).
-4. **Experience**: compact timeline: Software engineer at WANTED.solutions (since May 2024), research at the Institute of Scientific Instruments (2018 to 2023), research internship in Turin (2019).
+4. **Experience**: compact timeline: Software engineer at WANTED.solutions (May 2024 to October 2026), research at the Institute of Scientific Instruments (2018 to 2023), research internship in Turin (2019).
 5. **Publications** (below the Experience timeline): a count line, the Optics Letters article as a featured card, and the conference papers as a list (newest first, "First author" tag where true). Each item shows title, venue, year and a DOI link; no summaries (decided 11 November 2026). Data in `experience.json`.
 6. **Skills**: grouped lists, no percentage bars.
    - Languages: Python, SQL, JavaScript, Matlab
@@ -221,15 +221,17 @@ The steps are: install dependencies (`npm ci`), lint, type check, run the unit t
 
 ## 10. Content to prepare before building
 
-- [ ] Hero line and About text (English)
-- [ ] 3 to 5 projects with description, stack, link, outcome
+State checked against the repository on 20 November 2026.
+
+- [x] Hero line and About text (English), in `profile.json` and `about.json`
+- [x] 5 projects with description, stack and link, in `projects.json`: Rating Radar, Internal documentation chatbot, Centrum rovnátek, News monitoring service, and this website
 - [x] Current CV as PDF (one page), added 12 November 2026
-- [ ] Professional photo (optional)
+- [ ] Professional photo (optional; see section 12)
 - [x] Social preview image (text only), added 12 November 2026
-- [ ] Final LinkedIn URL
-- [ ] Permission check for any client work shown
+- [x] LinkedIn URL, in `profile.json`
+- [ ] Permission check for the client work shown (the four projects other than this website)
 - [x] Chess: Chess.com username (`hrasek`) and FIDE ID (`345652`), decided 12 November 2026
-- [ ] Chess: a 2 to 3 sentence personal text, and one favourite game as PGN (if the board is shown)
+- [ ] Chess: personal text has 1 sentence in `beyond-code.json` (2 to 3 planned); a favourite game as PGN only if the board is shown (see section 12)
 - [x] Pushbullet account and access token; test note received on Android, 17 November 2026
 - [ ] Contact form copy: labels, success and error messages, privacy note (English); a draft is in `contact.json`
 
